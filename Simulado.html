@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEDA - Central de Simulados ENEM</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            letter-spacing: 0.03em;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -100px;
+            left: 10px;
+            background: #ffcc00;
+            color: #000000;
+            padding: 12px 16px;
+            z-index: 10000;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .skip-link:focus {
+            top: 10px;
+        }
+
+        /* Fundo geral em Azul */
+        body {
+            background-color: #0033A0;
+            color: #ffffff;
+            padding: 20px;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        main {
+            width: 100%;
+            max-width: 900px;
+            margin: 20px 0;
+        }
+
+        /* Card principal do contêiner */
+        .container-principal {
+            background-color: #ffffff;
+            color: #1c1c1c;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: #0033A0;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            text-align: center;
+            color: #555555;
+            font-size: 1.05rem;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 15px;
+        }
+
+        /* Botão Secundário para voltar */
+        .btn-secondary {
+            display: inline-block;
+            padding: 10px 18px;
+            background-color: #f0f4f8;
+            color: #0033A0;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 6px;
+            border: 2px solid #0033A0;
+            margin-bottom: 25px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background-color: #d0ddf5;
+        }
+
+        /* Grid dos Simulados */
+        .grid-simulados {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        /* Cards Internos Brancos com borda em Roxo */
+        .simulado-card {
+            background-color: #ffffff;
+            border: 2px solid #6f42c1; /* Detalhe em roxo */
+            border-radius: 10px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(111, 66, 193, 0.12);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .simulado-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(111, 66, 193, 0.25);
+        }
+
+        .card-header {
+            margin-bottom: 15px;
+        }
+
+        .badge-tag {
+            display: inline-block;
+            background-color: #6f42c1; /* Roxo principal */
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
+
+        .card-header h2 {
+            color: #0033A0;
+            font-size: 1.4rem;
+        }
+
+        .card-body {
+            font-size: 0.95rem;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+
+        .card-body ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 10px 0;
+        }
+
+        .card-body li {
+            padding: 4px 0;
+            position: relative;
+            padding-left: 18px;
+        }
+
+        .card-body li::before {
+            content: "•";
+            color: #6f42c1; /* Marcador roxo */
+            font-weight: bold;
+            font-size: 1.2rem;
+            position: absolute;
+            left: 0;
+            top: -2px;
+        }
+
+        .card-info {
+            background-color: #f8fafc;
+            border-left: 4px solid #6f42c1;
+            padding: 10px 12px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* Botão Ação Principal (Tom de Roxo) */
+        .btn-purple {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background-color: #6f42c1;
+            color: #ffffff;
+            font-size: 1.05rem;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .btn-purple:hover {
+            background-color: #59359a;
+        }
+
+        /* Foco de Acessibilidade */
+        a:focus-visible,
+        button:focus-visible,
+        .skip-link:focus,
+        .accessibility-btn:focus-visible,
+        .acess-option-btn:focus-visible {
+            outline: 3px solid #ffcc00 !important;
+            outline-offset: 3px;
+        }
+
+        /* Posicionamento do Widget Flutuante */
+        .accessibility-widget {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .accessibility-btn {
+            background-color: #ffffff;
+            color: #6f42c1;
+            border: 3px solid #6f42c1;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+
+        .accessibility-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .accessibility-panel {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background-color: #ffffff;
+            color: #1c1c1c;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            width: 240px;
+            border: 2px solid #6f42c1;
+        }
+
+        .accessibility-panel h2 {
+            font-size: 1.1rem;
+            color: #6f42c1;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 6px;
+            margin-top: 0;
+        }
+
+        .accessibility-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .acess-option-btn {
+            background-color: #f0f4f8;
+            color: #0033A0;
+            border: 1px solid #0033A0;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        /* --------------------------------------------------
+           ALTO CONTRASTE
+        -------------------------------------------------- */
+        body.high-contrast {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+        }
+
+        body.high-contrast .container-principal,
+        body.high-contrast .simulado-card {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+            border: 2px solid #ffff00 !important;
+            box-shadow: none !important;
+        }
+
+        body.high-contrast h1, 
+        body.high-contrast h2, 
+        body.high-contrast p,
+        body.high-contrast .skip-link,
+        body.high-contrast .card-body li::before {
+            color: #ffff00 !important;
+        }
+
+        body.high-contrast .badge-tag,
+        body.high-contrast .btn-purple,
+        body.high-contrast .btn-secondary,
+        body.high-contrast .card-info {
+            background-color: #1a1a1a !important;
+            color: #ffff00 !important;
+            border: 1px solid #ffff00 !important;
+        }
+
+        body.high-contrast .accessibility-btn,
+        body.high-contrast .accessibility-panel,
+        body.high-contrast .acess-option-btn {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+            border-color: #ffff00 !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="#conteudo-principal" class="skip-link">Pular para os Simulados</a>
+
+    <!-- Widget Flutuante de Acessibilidade -->
+    <div class="accessibility-widget" role="region" aria-label="Menu de Acessibilidade">
+        <button id="accessibility-toggle" class="accessibility-btn" aria-expanded="false" aria-controls="accessibility-menu" title="Abrir menu de acessibilidade">
+            <span aria-hidden="true">♿</span>
+            <span class="sr-only">Acessibilidade</span>
+        </button>
+
+        <div id="accessibility-menu" class="accessibility-panel" hidden>
+            <h2>Acessibilidade</h2>
+            <div class="accessibility-options">
+                <button id="btn-increase-font" class="acess-option-btn">Aumentar Fonte</button>
+                <button id="btn-decrease-font" class="acess-option-btn">Diminuir Fonte</button>
+                <button id="btn-high-contrast" class="acess-option-btn" aria-pressed="false">Alto Contraste</button>
+                <button id="btn-reset-accessibility" class="acess-option-btn">Restaurar Padrão</button>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <div id="conteudo-principal" class="container-principal" tabindex="-1">
+            <header>
+                <h1>Simulados ENEM</h1>
+                <p>Escolha qual dia de prova você deseja praticar hoje</p>
+            </header>
+
+            <div>
+                <a href="Dashboard.html" class="btn-secondary">⬅ Voltar para o Dashboard</a>
+            </div>
+
+            <section class="grid-simulados" aria-label="Opções de Simulados">
+
+                <!-- CARD DIA 1 -->
+                <article class="simulado-card">
+                    <div>
+                        <div class="card-header">
+                            <span class="badge-tag">Primeiro Dia</span>
+                            <h2>Simulado Dia 1</h2>
+                        </div>
+
+                        <div class="card-body">
+                            <p><strong>Disciplinas contempladas:</strong></p>
+                            <ul>
+                                <li>Linguagens e Códigos</li>
+                                <li>Ciências Humanas</li>
+                                <li>Língua Estrangeira (Inglês)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="card-info">
+                            <p>⏱️ <strong>Total:</strong> 15 Questões</p>
+                            <p>🎯 <strong>Foco:</strong> Interpretação e Leitura Crítica</p>
+                        </div>
+
+                        <a href="Simulado1.html" class="btn-purple">Iniciar Prova - Dia 1 ➔</a>
+                    </div>
+                </article>
+
+                <!-- CARD DIA 2 -->
+                <article class="simulado-card">
+                    <div>
+                        <div class="card-header">
+                            <span class="badge-tag">Segundo Dia</span>
+                            <h2>Simulado Dia 2</h2>
+                        </div>
+
+                        <div class="card-body">
+                            <p><strong>Disciplinas contempladas:</strong></p>
+                            <ul>
+                                <li>Matemática e suas Tecnologias</li>
+                                <li>Ciências da Natureza (Biologia, Química e Física)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="card-info">
+                            <p>⏱️ <strong>Total:</strong> 10 Questões</p>
+                            <p>🎯 <strong>Foco:</strong> Raciocínio Lógico e Cálculos</p>
+                        </div>
+
+                        <a href="Simulado2.html" class="btn-purple">Iniciar Prova - Dia 2 ➔</a>
+                    </div>
+                </article>
+
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // Lógica do Widget de Acessibilidade
+        document.addEventListener("DOMContentLoaded", function () {
+            const toggleBtn = document.getElementById("accessibility-toggle");
+            const panel = document.getElementById("accessibility-menu");
+            const btnContrast = document.getElementById("btn-high-contrast");
+            const btnIncrease = document.getElementById("btn-increase-font");
+            const btnDecrease = document.getElementById("btn-decrease-font");
+            const btnReset = document.getElementById("btn-reset-accessibility");
+
+            let currentFontSize = 100;
+
+            toggleBtn.addEventListener("click", () => {
+                const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
+                toggleBtn.setAttribute("aria-expanded", !isExpanded);
+                panel.hidden = isExpanded;
+            });
+
+            document.addEventListener("click", (event) => {
+                if (!document.querySelector(".accessibility-widget").contains(event.target)) {
+                    toggleBtn.setAttribute("aria-expanded", "false");
+                    panel.hidden = true;
+                }
+            });
+
+            btnContrast.addEventListener("click", () => {
+                document.body.classList.toggle("high-contrast");
+                const isActive = document.body.classList.contains("high-contrast");
+                btnContrast.setAttribute("aria-pressed", isActive);
+                btnContrast.textContent = isActive ? "Desativar Alto Contraste" : "Alto Contraste";
+            });
+
+            btnIncrease.addEventListener("click", () => {
+                if (currentFontSize < 150) {
+                    currentFontSize += 10;
+                    document.documentElement.style.fontSize = currentFontSize + "%";
+                }
+            });
+
+            btnDecrease.addEventListener("click", () => {
+                if (currentFontSize > 90) {
+                    currentFontSize -= 10;
+                    document.documentElement.style.fontSize = currentFontSize + "%";
+                }
+            });
+
+            btnReset.addEventListener("click", () => {
+                currentFontSize = 100;
+                document.documentElement.style.fontSize = "100%";
+                document.body.classList.remove("high-contrast");
+                btnContrast.setAttribute("aria-pressed", "false");
+                btnContrast.textContent = "Alto Contraste";
+            });
+        });
+    </script>
+
+    <!-- Plugin de Libras (Hand Talk) -->
+    <script src="https://plugin.handtalk.me/web/latest/handtalk.min.js"></script>
+    <script>
+      var ht = new HT({
+        token: "SEU_TOKEN_AQUI"
+      });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEDA - Cronograma de 30 Dias</title>
+    <link rel="stylesheet" href="../CSS/Style.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* Fundo geral em azul Pantone 286 C */
+        body {
+            background-color: #0033a0;
+            color: #333333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Acessibilidade - Texto oculto para leitores de tela */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Link de salto de conteúdo */
+        .skip-link {
+            position: absolute;
+            top: -100px;
+            left: 10px;
+            background: #ffcc00;
+            color: #000000;
+            padding: 12px 16px;
+            z-index: 10000;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .skip-link:focus {
+            top: 10px;
+        }
+
+        /* Foco Visível Teclado */
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible,
+        .skip-link:focus,
+        .accessibility-btn:focus-visible,
+        .acess-option-btn:focus-visible {
+            outline: 3px solid #ffcc00 !important;
+            outline-offset: 3px;
+        }
+
+        /* Link de voltar em destaque claro */
+        .voltar-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            background-color: #ffffff;
+            color: #6f42c1; /* Detalhe Roxo */
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 10px 18px;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .voltar-link:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Cabeçalho da página */
+        header {
+            background-color: #ffffff;
+            color: #5a2d9c; /* Roxo Escuro */
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 6px solid #6f42c1; /* Detalhe Roxo */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            color: #5a2d9c;
+        }
+
+        header p {
+            color: #6f42c1;
+            font-size: 1rem;
+        }
+
+        /* Cartão principal da Semana (Branco) */
+        .semana-card {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            border-left: 6px solid #6f42c1; /* Detalhe Roxo */
+        }
+
+        .semana-card h2 {
+            color: #5a2d9c; /* Roxo Escuro */
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            margin-bottom: 18px;
+            font-size: 1.4rem;
+        }
+
+        /* Bloco individual de cada dia */
+        .dia-bloco {
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            background-color: #f8f9fa;
+            border-left: 5px solid #6f42c1; /* Detalhe Roxo */
+            border-radius: 6px;
+        }
+
+        .dia-bloco h3 {
+            font-size: 1.05rem;
+            margin-bottom: 8px;
+            color: #5a2d9c;
+        }
+
+        /* Tarefas e caixas de seleção */
+        .tarefa {
+            display: flex;
+            align-items: center;
+            margin: 6px 0;
+            font-size: 0.95rem;
+            color: #2b2b2b;
+            cursor: pointer;
+        }
+
+        .tarefa input[type="checkbox"] {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #6f42c1; /* Checkbox Roxo */
+        }
+
+        /* Destaque para tarefas concluídas */
+        .tarefa.concluido span {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        /* Destaque para o bloco de descanso */
+        .descanso {
+            border-left-color: #28a745;
+            background-color: #eef9f1;
+        }
+
+        .descanso p {
+            color: #1e7e34;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        /* Widget Flutuante de Acessibilidade */
+        .accessibility-widget {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .accessibility-btn {
+            background-color: #ffffff;
+            color: #6f42c1;
+            border: 3px solid #6f42c1;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+
+        .accessibility-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .accessibility-panel {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background-color: #ffffff;
+            color: #1c1c1c;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            width: 240px;
+            border: 2px solid #6f42c1;
+        }
+
+        .accessibility-panel h2 {
+            font-size: 1.1rem;
+            color: #5a2d9c;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 6px;
+            margin-top: 0;
+        }
+
+        .accessibility-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .acess-option-btn {
+            background-color: #f3f0fa;
+            color: #5a2d9c;
+            border: 1px solid #6f42c1;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        /* Estilos para Alto Contraste */
+        body.high-contrast {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+        }
+
+        body.high-contrast header,
+        body.high-contrast .semana-card,
+        body.high-contrast .dia-bloco,
+        body.high-contrast .accessibility-panel {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+            border: 2px solid #ffff00 !important;
+        }
+
+        body.high-contrast header h1,
+        body.high-contrast header p,
+        body.high-contrast .semana-card h2,
+        body.high-contrast .dia-bloco h3,
+        body.high-contrast .tarefa,
+        body.high-contrast .descanso p {
+            color: #ffff00 !important;
+        }
+
+        body.high-contrast .voltar-link,
+        body.high-contrast .acess-option-btn,
+        body.high-contrast .accessibility-btn {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+            border: 2px solid #ffff00 !important;
+        }
+
+        body.high-contrast .voltar-link:hover,
+        body.high-contrast .acess-option-btn:hover {
+            background-color: #ffff00 !important;
+            color: #000000 !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="#conteudo-principal" class="skip-link">Pular para o conteúdo principal</a>
+
+    <!-- Widget Flutuante de Acessibilidade -->
+    <div class="accessibility-widget" role="region" aria-label="Menu de Acessibilidade">
+        <button id="accessibility-toggle" class="accessibility-btn" aria-expanded="false" aria-controls="accessibility-menu" title="Abrir menu de acessibilidade">
+            <span aria-hidden="true">♿</span>
+            <span class="sr-only">Acessibilidade</span>
+        </button>
+
+        <div id="accessibility-menu" class="accessibility-panel" hidden>
+            <h2>Acessibilidade</h2>
+            <div class="accessibility-options">
+                <button id="btn-increase-font" class="acess-option-btn">Aumentar Fonte</button>
+                <button id="btn-decrease-font" class="acess-option-btn">Diminuir Fonte</button>
+                <button id="btn-high-contrast" class="acess-option-btn" aria-pressed="false">Alto Contraste</button>
+                <button id="btn-reset-accessibility" class="acess-option-btn">Restaurar Padrão</button>
+            </div>
+        </div>
+    </div>
+
+    <main id="conteudo-principal" class="container" tabindex="-1">
+
+        <a href="Cronograma.html" class="voltar-link">⬅ Voltar aos Cronogramas</a>
+
+        <header>
+            <h1>📘 Cronograma de 30 Dias (4 Semanas)</h1>
+            <p>Reta final com foco total nos conteúdos mais cobrados, revisões e simulados.</p>
+        </header>
+
+        <!-- SEMANA 1 -->
+        <div class="semana-card">
+            <h2>🔹 SEMANA 1</h2>
+
+            <div class="dia-bloco">
+                <h3>Segunda-feira</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s1_d1_t1"> <span><strong>Matemática:</strong> Funções e Porcentagem</span></label>
+                <label class="tarefa"><input type="checkbox" id="c30d_s1_d1_t2"> <span><strong>História:</strong> Brasil Colônia e Brasil Império</span></label>
+            </div>
+
+            <div class="dia-bloco">
+                <h3>Terça-feira</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s1_d2_t1"> <span><strong>Física:</strong> Cinemática e Leis de Newton</span></label>
+                <label class="tarefa"><input type="checkbox" id="c30d_s1_d2_t2"> <span><strong>Geografia:</strong> Cartografia, Clima e Relevo</span></label>
+            </div>
+
+            <div class="dia-bloco">
+                <h3>Quarta-feira</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s1_d3_t1"> <span><strong>Matemática:</strong> Geometria Plana</span></label>
+                <label class="tarefa"><input type="checkbox" id="c30d_s1_d3_t2"> <span><strong>Português:</strong> Interpretação de textos e Gramática</span></label>
+            </div>
+
+            <div class="dia-bloco">
+                <h3>Quinta-feira</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s1_d4_t1"> <span><strong>Química:</strong> Estrutura Atômica, Ligações Químicas e Funções Inorgânicas</span></label>
+                <label class="tarefa"><input type="checkbox" id="c30d_s1_d4_t2"> <span><strong>Biologia:</strong> Citologia e Bioquímica</span></label>
+            </div>
+
+            <div class="dia-bloco">
+                <h3>Sexta-feira</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s1_d5_t1"> <span><strong>Física:</strong> Trabalho, Energia e Hidrostática</span></label>
+                <label class="tarefa"><input type="checkbox" id="c30d_s1_d5_t2"> <span><strong>Filosofia e Sociologia:</strong> Filosofia Antiga, Cultura e Cidadania</span></label>
+            </div>
+
+            <div class="dia-bloco">
+                <h3>Sábado</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s1_d6_t1"> <span>📝 Redação (Tema Atual) + Correção + Revisão da Semana</span></label>
+            </div>
+
+            <div class="dia-bloco descanso">
+                <h3>Domingo</h3>
+                <p>☕ Descanso e recarga de energias.</p>
+            </div>
+        </div>
+
+        <!-- SEMANA 2 -->
+        <div class="semana-card">
+            <h2>🔹 SEMANA 2</h2>
+
+            <div class="dia-bloco">
+                <h3>Segunda-feira</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s2_d1_t1"> <span><strong>Matemática:</strong> Trigonometria e Geometria Espacial</span></label>
+                <label class="tarefa"><input type="checkbox" id="c30d_s2_d1_t2"> <span><strong>História:</strong> Revolução Francesa, Revolução Industrial e Primeira Guerra Mundial</span></label>
+            </div>
+
+            <div class="dia-bloco">
+                <h3>Terça-feira</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s2_d2_t1"> <span><strong>Física:</strong> Óptica</span></label>
+                <label class="tarefa"><input type="checkbox" id="c30d_s2_d2_t2"> <span><strong>Geografia:</strong> Urbanização, Globalização e Demografia</span></label>
+            </div>
+
+            <div class="dia-bloco">
+                <h3>Quarta-feira</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s2_d3_t1"> <span><strong>Matemática:</strong> Probabilidade, Estatística e Análise Combinatória</span></label>
+                <label class="tarefa"><input type="checkbox" id="c30d_s2_d3_t2"> <span><strong>Literatura:</strong> Escolas Literárias (Trovadorismo ao Modernismo)</span></label>
+            </div>
+
+            <div class="dia-bloco">
+                <h3>Quinta-feira</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s2_d4_t1"> <span><strong>Química:</strong> Estequiometria, Soluções e Termoquímica</span></label>
+                <label class="tarefa"><input type="checkbox" id="c30d_s2_d4_t2"> <span><strong>Biologia:</strong> Genética e Evolução</span></label>
+            </div>
+
+            <div class="dia-bloco">
+                <h3>Sexta-feira</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s2_d5_t1"> <span><strong>Física:</strong> Ondulatória</span></label>
+                <label class="tarefa"><input type="checkbox" id="c30d_s2_d5_t2"> <span><strong>Português:</strong> Sintaxe e Concordância</span></label>
+            </div>
+
+            <div class="dia-bloco">
+                <h3>Sábado</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s2_d6_t1"> <span>📝 Prova Antiga (1º Dia ENEM)</span></label>
+            </div>
+
+            <div class="dia-bloco descanso">
+                <h3>Domingo</h3>
+                <p>☕ Descanso e recarga de energias.</p>
+            </div>
+        </div>
+
+        <!-- SEMANA 3 -->
+        <div class="semana-card">
+            <h2>🔹 SEMANA 3</h2>
+
+            <div class="dia-bloco">
+                <h3>Segunda-feira</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s3_d1_t1"> <span><strong>Matemática:</strong> Revisão Geral</span></label>
+                <label class="tarefa"><input type="checkbox" id="c30d_s3_d1_t2"> <span><strong>História:</strong> Segunda Guerra Mundial, Guerra Fria e República Brasileira</span></label>
+            </div>
+
+            <div class="dia-bloco">
+                <h3>Terça-feira</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s3_d2_t1"> <span><strong>Física:</strong> Eletrostática, Eletrodinâmica e Magnetismo</span></label>
+                <label class="tarefa"><input type="checkbox" id="c30d_s3_d2_t2"> <span><strong>Geografia:</strong> Agricultura, Indústria e Meio Ambiente</span></label>
+            </div>
+
+            <div class="dia-bloco">
+                <h3>Quarta-feira</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s3_d3_t1"> <span><strong>Química:</strong> Cinética, Equilíbrio Químico e Eletroquímica</span></label>
+                <label class="tarefa"><input type="checkbox" id="c30d_s3_d3_t2"> <span><strong>Biologia:</strong> Ecologia e Fisiologia Humana</span></label>
+            </div>
+
+            <div class="dia-bloco">
+                <h3>Quinta-feira</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s3_d4_t1"> <span>Revisão Geral de Humanas</span></label>
+                <label class="tarefa"><input type="checkbox" id="c30d_s3_d4_t2"> <span>Artes, Filosofia e Sociologia</span></label>
+            </div>
+
+            <div class="dia-bloco">
+                <h3>Sexta-feira</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s3_d5_t1"> <span>Revisão Geral de Linguagens e Língua Estrangeira</span></label>
+                <label class="tarefa"><input type="checkbox" id="c30d_s3_d5_t2"> <span>Redação (estrutura e repertórios)</span></label>
+            </div>
+
+            <div class="dia-bloco">
+                <h3>Sábado</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s3_d6_t1"> <span>📝 Prova Antiga (2º Dia ENEM)</span></label>
+            </div>
+
+            <div class="dia-bloco descanso">
+                <h3>Domingo</h3>
+                <p>☕ Descanso e recarga de energias.</p>
+            </div>
+        </div>
+
+        <!-- SEMANA 4 -->
+        <div class="semana-card">
+            <h2>🔹 SEMANA 4 (RETA FINAL)</h2>
+
+            <div class="dia-bloco">
+                <h3>Segunda-feira</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s4_d1_t1"> <span>Revisão de Matemática + Resolução de questões</span></label>
+            </div>
+
+            <div class="dia-bloco">
+                <h3>Terça-feira</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s4_d2_t1"> <span>Revisão de Biologia e Química</span></label>
+            </div>
+
+            <div class="dia-bloco">
+                <h3>Quarta-feira</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s4_d3_t1"> <span>Revisão de Física</span></label>
+            </div>
+
+            <div class="dia-bloco">
+                <h3>Quinta-feira</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s4_d4_t1"> <span>Revisão de História, Geografia, Filosofia e Sociologia</span></label>
+            </div>
+
+            <div class="dia-bloco">
+                <h3>Sexta-feira</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s4_d5_t1"> <span>Revisão de Português, Literatura e Redação</span></label>
+                <label class="tarefa"><input type="checkbox" id="c30d_s4_d5_t2"> <span>Revisão de fórmulas, mapas mentais e caderno de erros</span></label>
+            </div>
+
+            <div class="dia-bloco">
+                <h3>Sábado</h3>
+                <label class="tarefa"><input type="checkbox" id="c30d_s4_d6_t1"> <span>📝 Simulado Final (tempo real) ou revisão leve</span></label>
+            </div>
+
+            <div class="dia-bloco descanso">
+                <h3>Domingo</h3>
+                <p>🎯 Descanso e preparação mental para o grande dia!</p>
+            </div>
+        </div>
+
+    </main>
+
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // --- 1. LÓGICA DE SALVAMENTO DE PROGRESSO ---
+            const checkboxes = document.querySelectorAll('.tarefa input[type="checkbox"]');
+
+            checkboxes.forEach(chk => {
+                if (chk.id) {
+                    // Restaura estado do localStorage
+                    const statusSalvo = localStorage.getItem(chk.id);
+                    if (statusSalvo === 'true') {
+                        chk.checked = true;
+                        if (chk.parentElement) {
+                            chk.parentElement.classList.add('concluido');
+                        }
+                    }
+
+                    // Evento para salvar ao clicar
+                    chk.addEventListener('change', (e) => {
+                        const status = e.target.checked;
+                        localStorage.setItem(chk.id, status);
+
+                        if (status) {
+                            chk.parentElement.classList.add('concluido');
+                        } else {
+                            chk.parentElement.classList.remove('concluido');
+                        }
+                    });
+                }
+            });
+
+            // --- 2. LÓGICA DO WIDGET DE ACESSIBILIDADE ---
+            const toggleBtn = document.getElementById("accessibility-toggle");
+            const panel = document.getElementById("accessibility-menu");
+            const btnContrast = document.getElementById("btn-high-contrast");
+            const btnIncrease = document.getElementById("btn-increase-font");
+            const btnDecrease = document.getElementById("btn-decrease-font");
+            const btnReset = document.getElementById("btn-reset-accessibility");
+
+            let currentFontSize = 100;
+
+            toggleBtn.addEventListener("click", () => {
+                const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
+                toggleBtn.setAttribute("aria-expanded", !isExpanded);
+                panel.hidden = isExpanded;
+            });
+
+            document.addEventListener("click", (event) => {
+                if (!document.querySelector(".accessibility-widget").contains(event.target)) {
+                    toggleBtn.setAttribute("aria-expanded", "false");
+                    panel.hidden = true;
+                }
+            });
+
+            btnContrast.addEventListener("click", () => {
+                document.body.classList.toggle("high-contrast");
+                const isActive = document.body.classList.contains("high-contrast");
+                btnContrast.setAttribute("aria-pressed", isActive);
+                btnContrast.textContent = isActive ? "Desativar Alto Contraste" : "Alto Contraste";
+            });
+
+            btnIncrease.addEventListener("click", () => {
+                if (currentFontSize < 150) {
+                    currentFontSize += 10;
+                    document.documentElement.style.fontSize = currentFontSize + "%";
+                }
+            });
+
+            btnDecrease.addEventListener("click", () => {
+                if (currentFontSize > 90) {
+                    currentFontSize -= 10;
+                    document.documentElement.style.fontSize = currentFontSize + "%";
+                }
+            });
+
+            btnReset.addEventListener("click", () => {
+                currentFontSize = 100;
+                document.documentElement.style.fontSize = "100%";
+                document.body.classList.remove("high-contrast");
+                btnContrast.setAttribute("aria-pressed", "false");
+                btnContrast.textContent = "Alto Contraste";
+            });
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEDA - Cronogramas de Estudos</title>
+    <link rel="stylesheet" href="../CSS/Style.css">
+    <style>
+        /* Estilos Gerais e Esquema de Cores Solicitado */
+        body {
+            background-color: #0033a0; /* Azul Pantone 286 C */
+            color: #1c1c1c;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Acessibilidade - Texto oculto para leitores de tela */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Link de salto de conteúdo */
+        .skip-link {
+            position: absolute;
+            top: -100px;
+            left: 10px;
+            background: #ffcc00;
+            color: #000000;
+            padding: 12px 16px;
+            z-index: 10000;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .skip-link:focus {
+            top: 10px;
+        }
+
+        /* Foco Visível Teclado */
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible,
+        .skip-link:focus,
+        .accessibility-btn:focus-visible,
+        .acess-option-btn:focus-visible {
+            outline: 3px solid #ffcc00 !important;
+            outline-offset: 3px;
+        }
+
+        header {
+            text-align: center;
+            color: #ffffff;
+            padding: 30px 20px 10px 20px;
+        }
+
+        header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.2rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: #e0e0e0;
+            margin: 0;
+        }
+
+        .container-cronograma {
+            max-width: 900px;
+            margin: 20px auto 40px auto;
+            padding: 0 20px;
+        }
+
+        .btn-voltar {
+            display: inline-block;
+            background-color: #ffffff;
+            color: #6f42c1; /* Detalhe Roxo */
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 18px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-voltar:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Card / Caixas Brancas com Detalhes Roxos */
+        .cronograma-card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border-left: 6px solid #6f42c1; /* Detalhe Roxo */
+        }
+
+        .cronograma-header {
+            margin-bottom: 15px;
+        }
+
+        .badge-prazo {
+            display: inline-block;
+            background-color: #6f42c1; /* Roxo */
+            color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
+
+        .cronograma-card h2 {
+            margin: 0;
+            color: #5a2d9c; /* Roxo Escuro */
+            font-size: 1.5rem;
+        }
+
+        .cronograma-body p {
+            line-height: 1.5;
+            color: #333333;
+        }
+
+        .cronograma-body ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 15px;
+        }
+
+        .cronograma-body ul li {
+            margin-bottom: 10px;
+        }
+
+        .cronograma-body ul li a,
+        .btn-acessar {
+            display: inline-block;
+            color: #6f42c1;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 12px;
+            border: 1px solid #6f42c1;
+            border-radius: 5px;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .cronograma-body ul li a:hover,
+        .btn-acessar:hover {
+            background-color: #6f42c1;
+            color: #ffffff;
+        }
+
+        .btn-acessar {
+            margin-top: 10px;
+        }
+
+        /* Widget Flutuante de Acessibilidade */
+        .accessibility-widget {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .accessibility-btn {
+            background-color: #ffffff;
+            color: #6f42c1;
+            border: 3px solid #6f42c1;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+
+        .accessibility-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .accessibility-panel {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background-color: #ffffff;
+            color: #1c1c1c;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            width: 240px;
+            border: 2px solid #6f42c1;
+        }
+
+        .accessibility-panel h2 {
+            font-size: 1.1rem;
+            color: #5a2d9c;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 6px;
+            margin-top: 0;
+        }
+
+        .accessibility-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .acess-option-btn {
+            background-color: #f5f0bb;
+            background-color: #f3f0fa;
+            color: #5a2d9c;
+            border: 1px solid #6f42c1;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        /* Estilos para Alto Contraste */
+        body.high-contrast {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+        }
+
+        body.high-contrast header h1,
+        body.high-contrast header p,
+        body.high-contrast h2,
+        body.high-contrast p,
+        body.high-contrast strong,
+        body.high-contrast span {
+            color: #ffff00 !important;
+        }
+
+        body.high-contrast .cronograma-card,
+        body.high-contrast .accessibility-panel {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+            border: 2px solid #ffff00 !important;
+        }
+
+        body.high-contrast .badge-prazo {
+            background-color: #ffff00 !important;
+            color: #000000 !important;
+        }
+
+        body.high-contrast .btn-voltar,
+        body.high-contrast .cronograma-body ul li a,
+        body.high-contrast .btn-acessar,
+        body.high-contrast .acess-option-btn,
+        body.high-contrast .accessibility-btn {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+            border: 2px solid #ffff00 !important;
+        }
+
+        body.high-contrast .cronograma-body ul li a:hover,
+        body.high-contrast .btn-acessar:hover {
+            background-color: #ffff00 !important;
+            color: #000000 !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="#conteudo-principal" class="skip-link">Pular para o conteúdo principal</a>
+
+    <!-- Widget Flutuante de Acessibilidade -->
+    <div class="accessibility-widget" role="region" aria-label="Menu de Acessibilidade">
+        <button id="accessibility-toggle" class="accessibility-btn" aria-expanded="false" aria-controls="accessibility-menu" title="Abrir menu de acessibilidade">
+            <span aria-hidden="true">♿</span>
+            <span class="sr-only">Acessibilidade</span>
+        </button>
+
+        <div id="accessibility-menu" class="accessibility-panel" hidden>
+            <h2>Acessibilidade</h2>
+            <div class="accessibility-options">
+                <button id="btn-increase-font" class="acess-option-btn">Aumentar Fonte</button>
+                <button id="btn-decrease-font" class="acess-option-btn">Diminuir Fonte</button>
+                <button id="btn-high-contrast" class="acess-option-btn" aria-pressed="false">Alto Contraste</button>
+                <button id="btn-reset-accessibility" class="acess-option-btn">Restaurar Padrão</button>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <h1>Cronogramas de Estudos - AEDA</h1>
+        <p>Escolha o plano de estudos ideal para o seu tempo de preparação</p>
+    </header>
+
+    <main id="conteudo-principal" class="container-cronograma" tabindex="-1">
+
+        <div>
+            <!-- Link direto para o Dashboard -->
+            <a href="Dashboard.html" class="btn-voltar">⬅ Voltar para Dashboard</a>
+        </div>
+
+        <div>
+
+            <!-- CRONOGRAMA 12 MESES -->
+            <div class="cronograma-card">
+                <div class="cronograma-header">
+                    <span class="badge-prazo">Longo Prazo</span>
+                    <h2>Cronograma 12 Meses (Extensivo)</h2>
+                </div>
+
+                <div class="cronograma-body">
+                    <p><strong>Descrição:</strong> Preparação completa cobrindo todo o edital do ENEM/Vestibulares. Selecione a etapa de semanas que você está estudando:</p>
+                    <p>🎯 <strong>Selecione o Bloco de Semanas:</strong></p>
+                    
+                    <ul>
+                        <li><a href="12Meses-Parte1Cronograma12M_Semana1a15.html">📌 Semanas 01 a 15 (Módulos Iniciais & Base)</a></li>
+                        <li><a href="12Meses-Parte2Cronograma12M_Semana16a30.html">📌 Semanas 16 a 30 (Aprofundamento & Prática)</a></li>
+                        <li><a href="12Meses-Parte3Cronograma12M_Semana31a42.html">📌 Semanas 31 a 42 (Consolidação & Reta Final)</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- CRONOGRAMA 6 MESES -->
+            <div class="cronograma-card">
+                <div class="cronograma-header">
+                    <span class="badge-prazo">Médio Prazo</span>
+                    <h2>Cronograma 6 Meses</h2>
+                </div>
+
+                <div class="cronograma-body">
+                    <p><strong>Descrição:</strong> Foco nos conteúdos de média e alta recorrência. Equilíbrio entre teoria essencial e resolução de questões:</p>
+                    <p>🎯 <strong>Selecione o Bloco de Semanas:</strong></p>
+
+                    <ul>
+                        <li><a href="Cronograma6M_Semana1a13.html">📌 Semanas 01 a 13 (Conteúdos Base & Média Recorrência)</a></li>
+                        <li><a href="Cronograma6M_Semana14a26.html">📌 Semanas 14 a 26 (Alta Recorrência & Prática Intensiva)</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- CRONOGRAMA 3 MESES -->
+            <div class="cronograma-card">
+                <div class="cronograma-header">
+                    <span class="badge-prazo">Intensivo</span>
+                    <h2>Cronograma 3 Meses</h2>
+                </div>
+
+                <div class="cronograma-body">
+                    <p><strong>Descrição:</strong> Reta final direta ao ponto. Estudo direcionado estritamente para os tópicos prioritários e simulados semanais.</p>
+                    <a href="Cronograma3Meses.html" class="btn-acessar">Acessar Cronograma (3 Meses)</a>
+                </div>
+            </div>
+
+            <!-- CRONOGRAMA 30 DIAS -->
+            <div class="cronograma-card">
+                <div class="cronograma-header">
+                    <span class="badge-prazo">Super Intensivo</span>
+                    <h2>Cronograma 30 Dias</h2>
+                </div>
+
+                <div class="cronograma-body">
+                    <p><strong>Descrição:</strong> Revisão relâmpago para a véspera da prova. Foco total em provas antigas, resumos rápidos e pontos fracos.</p>
+                    <a href="Cronograma30Dias.html" class="btn-acessar">Acessar Cronograma (30 Dias)</a>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        // Lógica do Widget de Acessibilidade
+        document.addEventListener("DOMContentLoaded", function () {
+            const toggleBtn = document.getElementById("accessibility-toggle");
+            const panel = document.getElementById("accessibility-menu");
+            const btnContrast = document.getElementById("btn-high-contrast");
+            const btnIncrease = document.getElementById("btn-increase-font");
+            const btnDecrease = document.getElementById("btn-decrease-font");
+            const btnReset = document.getElementById("btn-reset-accessibility");
+
+            let currentFontSize = 100;
+
+            toggleBtn.addEventListener("click", () => {
+                const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
+                toggleBtn.setAttribute("aria-expanded", !isExpanded);
+                panel.hidden = isExpanded;
+            });
+
+            document.addEventListener("click", (event) => {
+                if (!document.querySelector(".accessibility-widget").contains(event.target)) {
+                    toggleBtn.setAttribute("aria-expanded", "false");
+                    panel.hidden = true;
+                }
+            });
+
+            btnContrast.addEventListener("click", () => {
+                document.body.classList.toggle("high-contrast");
+                const isActive = document.body.classList.contains("high-contrast");
+                btnContrast.setAttribute("aria-pressed", isActive);
+                btnContrast.textContent = isActive ? "Desativar Alto Contraste" : "Alto Contraste";
+            });
+
+            btnIncrease.addEventListener("click", () => {
+                if (currentFontSize < 150) {
+                    currentFontSize += 10;
+                    document.documentElement.style.fontSize = currentFontSize + "%";
+                }
+            });
+
+            btnDecrease.addEventListener("click", () => {
+                if (currentFontSize > 90) {
+                    currentFontSize -= 10;
+                    document.documentElement.style.fontSize = currentFontSize + "%";
+                }
+            });
+
+            btnReset.addEventListener("click", () => {
+                currentFontSize = 100;
+                document.documentElement.style.fontSize = "100%";
+                document.body.classList.remove("high-contrast");
+                btnContrast.setAttribute("aria-pressed", "false");
+                btnContrast.textContent = "Alto Contraste";
+            });
+        });
+    </script>
+
+    <!-- Plugin de Libras (Hand Talk) -->
+    <script src="https://plugin.handtalk.me/web/latest/handtalk.min.js"></script>
+    <script>
+      var ht = new HT({
+        token: "SEU_TOKEN_AQUI"
+      });
+    </script>
+</body>
+
+</html>

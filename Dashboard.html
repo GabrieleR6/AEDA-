@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEDA - Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            letter-spacing: 0.03em;
+        }
+
+        /* Classe utilitária para leitores de tela */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Link para pular direto para o conteúdo principal */
+        .skip-link {
+            position: absolute;
+            top: -100px;
+            left: 10px;
+            background: #ffcc00;
+            color: #000000;
+            padding: 12px 16px;
+            z-index: 10000;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .skip-link:focus {
+            top: 10px;
+        }
+
+        /* Fundo geral em Azul (Pantone 286 C) */
+        body {
+            background-color: #0033A0;
+            color: #ffffff;
+            padding: 20px;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        main {
+            width: 100%;
+            max-width: 650px;
+            margin: 20px 0;
+        }
+
+        /* Card principal do Dashboard */
+        .card {
+            background-color: #ffffff;
+            color: #1c1c1c;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            color: #0033A0;
+        }
+
+        .btn-sair {
+            background-color: #c53030;
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-sair:hover {
+            background-color: #9b2c2c;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            color: #0033A0;
+            margin-bottom: 8px;
+        }
+
+        .saudacao-texto {
+            font-size: 1.1rem;
+            color: #222222;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        /* Menu de Botões do Dashboard */
+        .menu-dashboard {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .botao-menu a {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background-color: #f0f4f8;
+            color: #0033A0;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.05rem;
+            text-align: center;
+            border-radius: 8px;
+            border-left: 6px solid #0033A0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .botao-menu a:hover {
+            background-color: #d0ddf5;
+            transform: translateX(3px);
+        }
+
+        /* Foco visual para acessibilidade de teclado */
+        a:focus-visible,
+        button:focus-visible,
+        .skip-link:focus,
+        .accessibility-btn:focus-visible,
+        .acess-option-btn:focus-visible {
+            outline: 3px solid #ffcc00 !important;
+            outline-offset: 3px;
+        }
+
+        /* Posicionamento do Widget Flutuante de Acessibilidade */
+        .accessibility-widget {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .accessibility-btn {
+            background-color: #ffffff;
+            color: #0033A0;
+            border: 3px solid #0033A0;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .accessibility-btn:hover {
+            background-color: #f0f4f8;
+            transform: scale(1.05);
+        }
+
+        .accessibility-panel {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background-color: #ffffff;
+            color: #1c1c1c;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            width: 240px;
+            border: 2px solid #0033A0;
+        }
+
+        .accessibility-panel h2 {
+            font-size: 1.1rem;
+            color: #0033A0;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 6px;
+            margin-top: 0;
+        }
+
+        .accessibility-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .acess-option-btn {
+            background-color: #f0f4f8;
+            color: #0033A0;
+            border: 1px solid #0033A0;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: left;
+            transition: background-color 0.2s;
+        }
+
+        .acess-option-btn:hover {
+            background-color: #d0ddf5;
+        }
+
+        /* --------------------------------------------------
+           ESTILOS DE ALTO CONTRASTE
+        -------------------------------------------------- */
+        body.high-contrast {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+        }
+
+        body.high-contrast .card {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+            border: 2px solid #ffff00 !important;
+            box-shadow: none !important;
+        }
+
+        body.high-contrast h1, 
+        body.high-contrast h2, 
+        body.high-contrast .saudacao-texto,
+        body.high-contrast .skip-link {
+            color: #ffff00 !important;
+        }
+
+        body.high-contrast .botao-menu a {
+            background-color: #1a1a1a !important;
+            color: #ffff00 !important;
+            border: 1px solid #ffff00 !important;
+            border-left: 6px solid #ffff00 !important;
+        }
+
+        body.high-contrast .btn-sair {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+            border: 2px solid #ffff00 !important;
+        }
+
+        body.high-contrast .accessibility-btn,
+        body.high-contrast .accessibility-panel {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+            border-color: #ffff00 !important;
+        }
+
+        body.high-contrast .acess-option-btn {
+            background-color: #1a1a1a !important;
+            color: #ffff00 !important;
+            border-color: #ffff00 !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="#conteudo-principal" class="skip-link">Pular para as opções do Dashboard</a>
+
+    <!-- Widget Flutuante de Acessibilidade -->
+    <div class="accessibility-widget" role="region" aria-label="Menu de Acessibilidade">
+        <button id="accessibility-toggle" class="accessibility-btn" aria-expanded="false" aria-controls="accessibility-menu" title="Abrir menu de acessibilidade">
+            <span aria-hidden="true">♿</span>
+            <span class="sr-only">Acessibilidade</span>
+        </button>
+
+        <div id="accessibility-menu" class="accessibility-panel" hidden>
+            <h2>Acessibilidade</h2>
+            <div class="accessibility-options">
+                <button id="btn-increase-font" class="acess-option-btn">Aumentar Fonte</button>
+                <button id="btn-decrease-font" class="acess-option-btn">Diminuir Fonte</button>
+                <button id="btn-high-contrast" class="acess-option-btn" aria-pressed="false">Alto Contraste</button>
+                <button id="btn-reset-accessibility" class="acess-option-btn">Restaurar Padrão</button>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <section id="conteudo-principal" class="card" tabindex="-1">
+            <header>
+                <h1>Painel AEDA</h1>
+                <button type="button" id="btnSair" class="btn-sair" aria-label="Sair da conta e voltar para a página de login">Sair</button>
+            </header>
+
+            <h2>E aí, futuro calouro!</h2>
+            <p id="nomeAluno" class="saudacao-texto">Carregando...</p>
+
+            <nav class="menu-dashboard" aria-label="Menu Principal de Estudos">
+                <div class="botao-menu">
+                    <a href="Cronograma.html">Cronograma de Estudos</a>
+                </div>
+
+                <div class="botao-menu">
+                    <a href="Vídeoaula.html">Vídeo Aulas</a>
+                </div>
+
+                <div class="botao-menu">
+                    <a href="Flashcards.html">Flashcards</a>
+                </div>
+
+                <div class="botao-menu">
+                    <a href="Questoes.html">Banco de Questões</a>
+                </div>
+
+                <div class="botao-menu">
+                    <a href="Simulado.html">Simulados</a>
+                </div>
+
+                <div class="botao-menu">
+                    <a href="DD.html">DD (Assistente IA)</a>
+                </div>
+            </nav>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const nomeAluno = document.getElementById("nomeAluno");
+            const btnSair = document.getElementById("btnSair");
+
+            // Verificar usuário logado
+            const usuarioLogado = JSON.parse(
+                localStorage.getItem("usuarioAEDA_Logado")
+            );
+
+            if (usuarioLogado && usuarioLogado.nome) {
+                nomeAluno.textContent = "E aí, " + usuarioLogado.nome + "! O que quer estudar hoje?";
+            } else {
+                alert("Nenhum usuário encontrado. Por favor, faça o login.");
+                // Redireciona para index.html
+                window.location.href = "index.html";
+            }
+
+            // Botão sair
+            btnSair.addEventListener("click", function () {
+                localStorage.removeItem("usuarioAEDA_Logado");
+                // Redireciona para index.html
+                window.location.href = "index.html";
+            });
+
+            // Lógica do Widget de Acessibilidade
+            const toggleBtn = document.getElementById("accessibility-toggle");
+            const panel = document.getElementById("accessibility-menu");
+            const btnContrast = document.getElementById("btn-high-contrast");
+            const btnIncrease = document.getElementById("btn-increase-font");
+            const btnDecrease = document.getElementById("btn-decrease-font");
+            const btnReset = document.getElementById("btn-reset-accessibility");
+
+            let currentFontSize = 100;
+
+            toggleBtn.addEventListener("click", () => {
+                const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
+                toggleBtn.setAttribute("aria-expanded", !isExpanded);
+                panel.hidden = isExpanded;
+            });
+
+            document.addEventListener("click", (event) => {
+                if (!document.querySelector(".accessibility-widget").contains(event.target)) {
+                    toggleBtn.setAttribute("aria-expanded", "false");
+                    panel.hidden = true;
+                }
+            });
+
+            btnContrast.addEventListener("click", () => {
+                document.body.classList.toggle("high-contrast");
+                const isActive = document.body.classList.contains("high-contrast");
+                btnContrast.setAttribute("aria-pressed", isActive);
+                btnContrast.textContent = isActive ? "Desativar Alto Contraste" : "Alto Contraste";
+            });
+
+            btnIncrease.addEventListener("click", () => {
+                if (currentFontSize < 150) {
+                    currentFontSize += 10;
+                    document.documentElement.style.fontSize = currentFontSize + "%";
+                }
+            });
+
+            btnDecrease.addEventListener("click", () => {
+                if (currentFontSize > 90) {
+                    currentFontSize -= 10;
+                    document.documentElement.style.fontSize = currentFontSize + "%";
+                }
+            });
+
+            btnReset.addEventListener("click", () => {
+                currentFontSize = 100;
+                document.documentElement.style.fontSize = "100%";
+                document.body.classList.remove("high-contrast");
+                btnContrast.setAttribute("aria-pressed", "false");
+                btnContrast.textContent = "Alto Contraste";
+            });
+
+        });
+    </script>
+
+    <!-- Plugin de Libras (Hand Talk) -->
+    <script src="https://plugin.handtalk.me/web/latest/handtalk.min.js"></script>
+    <script>
+      var ht = new HT({
+        token: "SEU_TOKEN_AQUI"
+      });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,1930 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEDA - Cronograma de 12 Meses (Parte 1  )</title>
+    <link rel="stylesheet" href="../CSS/Style.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* Fundo geral da página em azul Pantone 286 C */
+        body {
+            background-color: #0033a0;
+            color: #333333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Acessibilidade - Texto oculto para leitores de tela */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Link de salto de conteúdo */
+        .skip-link {
+            position: absolute;
+            top: -100px;
+            left: 10px;
+            background: #ffcc00;
+            color: #000000;
+            padding: 12px 16px;
+            z-index: 10000;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .skip-link:focus {
+            top: 10px;
+        }
+
+        /* Foco Visível Teclado */
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible,
+        .skip-link:focus,
+        .accessibility-btn:focus-visible,
+        .acess-option-btn:focus-visible {
+            outline: 3px solid #ffcc00 !important;
+            outline-offset: 3px;
+        }
+
+        /* Link de voltar em destaque claro */
+        .voltar-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            background-color: #ffffff;
+            color: #6f42c1; /* Detalhe Roxo */
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 10px 18px;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .voltar-link:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Cabeçalho da página */
+        header {
+            background-color: #ffffff;
+            color: #5a2d9c; /* Roxo Escuro */
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 6px solid #6f42c1; /* Detalhe Roxo */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            color: #5a2d9c;
+        }
+
+        header p {
+            color: #6f42c1;
+            font-size: 1rem;
+        }
+
+        /* Cartão principal da Semana (Branco) */
+        .semana-card {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            border-left: 6px solid #6f42c1; /* Detalhe Roxo */
+        }
+
+        .semana-card h2 {
+            color: #5a2d9c; /* Roxo Escuro */
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            margin-bottom: 18px;
+            font-size: 1.4rem;
+        }
+
+        /* Bloco individual de cada dia */
+        .dia-bloco {
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            background-color: #f8f9fa;
+            border-left: 5px solid #6f42c1; /* Detalhe Roxo */
+            border-radius: 6px;
+        }
+
+        .dia-bloco h3 {
+            font-size: 1.05rem;
+            margin-bottom: 8px;
+            color: #5a2d9c;
+        }
+
+        /* Tarefas e caixas de seleção */
+        .tarefa {
+            display: flex;
+            align-items: center;
+            margin: 6px 0;
+            font-size: 0.95rem;
+            color: #2b2b2b;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .tarefa input[type="checkbox"] {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #6f42c1; /* Checkbox Roxo */
+        }
+
+        .tarefa label {
+            cursor: pointer;
+        }
+
+        /* Efeito de tachado quando a tarefa é concluída */
+        .tarefa.concluido label span {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        /* Destaque para o bloco de descanso */
+        .descanso {
+            border-left-color: #28a745;
+            background-color: #eef9f1;
+        }
+
+        .descanso p {
+            color: #1e7e34;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        /* Widget Flutuante de Acessibilidade */
+        .accessibility-widget {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .accessibility-btn {
+            background-color: #ffffff;
+            color: #6f42c1;
+            border: 3px solid #6f42c1;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+
+        .accessibility-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .accessibility-panel {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background-color: #ffffff;
+            color: #1c1c1c;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            width: 240px;
+            border: 2px solid #6f42c1;
+        }
+
+        .accessibility-panel h2 {
+            font-size: 1.1rem;
+            color: #5a2d9c;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 6px;
+            margin-top: 0;
+        }
+
+        .accessibility-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .acess-option-btn {
+            background-color: #f3f0fa;
+            color: #5a2d9c;
+            border: 1px solid #6f42c1;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        /* Estilos para Alto Contraste */
+        body.high-contrast {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+        }
+
+        body.high-contrast header,
+        body.high-contrast .semana-card,
+        body.high-contrast .dia-bloco,
+        body.high-contrast .accessibility-panel {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+            border: 2px solid #ffff00 !important;
+        }
+
+        body.high-contrast header h1,
+        body.high-contrast header p,
+        body.high-contrast .semana-card h2,
+        body.high-contrast .dia-bloco h3,
+        body.high-contrast .tarefa,
+        body.high-contrast .descanso p {
+            color: #ffff00 !important;
+        }
+
+        body.high-contrast .voltar-link,
+        body.high-contrast .acess-option-btn,
+        body.high-contrast .accessibility-btn {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+            border: 2px solid #ffff00 !important;
+        }
+
+        body.high-contrast .voltar-link:hover,
+        body.high-contrast .acess-option-btn:hover {
+            background-color: #ffff00 !important;
+            color: #000000 !important;
+        }
+
+        /* Foco ultra-visível no modo de alto contraste */
+        body.high-contrast a:focus-visible,
+        body.high-contrast button:focus-visible,
+        body.high-contrast input:focus-visible {
+            outline: 3px solid #ffffff !important;
+            outline-offset: 4px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="#conteudo-principal" class="skip-link">Pular para o conteúdo principal</a>
+
+    <!-- Widget Flutuante de Acessibilidade -->
+    <div class="accessibility-widget" role="region" aria-label="Menu de Acessibilidade">
+        <button id="accessibility-toggle" class="accessibility-btn" aria-expanded="false" aria-controls="accessibility-menu" title="Abrir menu de acessibilidade">
+            <span aria-hidden="true">♿</span>
+            <span class="sr-only">Acessibilidade</span>
+        </button>
+
+        <div id="accessibility-menu" class="accessibility-panel" hidden>
+            <h2>Acessibilidade</h2>
+            <div class="accessibility-options">
+                <button id="btn-increase-font" class="acess-option-btn">Aumentar Fonte</button>
+                <button id="btn-decrease-font" class="acess-option-btn">Diminuir Fonte</button>
+                <button id="btn-high-contrast" class="acess-option-btn" aria-pressed="false">Alto Contraste</button>
+                <button id="btn-reset-accessibility" class="acess-option-btn">Restaurar Padrão</button>
+            </div>
+        </div>
+    </div>
+
+    <main id="conteudo-principal" class="container" tabindex="-1">
+
+        <!-- BOTÃO CONFIGURADO PARA VOLTAR AO Cronograma.html -->
+        <a href="Cronograma.html" class="voltar-link">⬅ Voltar aos Cronogramas</a>
+
+        <header>
+            <h1>📚 Cronograma de 12 Meses (42 Semanas)</h1>
+            <p>Preparação completa de longo prazo. Parte 1.</p>
+        </header>
+
+        <!-- SEMANA 1 -->
+        <div class="semana-card">
+            <h2>🔹 SEMANA 1 — Base inicial</h2>
+            <div class="dia-bloco">
+                <h3>Segunda-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s1_d1_t1" aria-checked="false">
+                    <label for="c12m_s1_d1_t1"><span><strong>Matemática:</strong> Quatro operações, expressões numéricas, frações e dízimas periódicas</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s1_d1_t2" aria-checked="false">
+                    <label for="c12m_s1_d1_t2"><span><strong>História:</strong> Pré-História, Egito e Mesopotâmia</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Terça-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s1_d2_t1" aria-checked="false">
+                    <label for="c12m_s1_d2_t1"><span><strong>Física:</strong> Grandezas, vetores e sistemas de unidades</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s1_d2_t2" aria-checked="false">
+                    <label for="c12m_s1_d2_t2"><span><strong>Geografia:</strong> Cartografia, orientação, coordenadas geográficas, escalas e projeções</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Quarta-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s1_d3_t1" aria-checked="false">
+                    <label for="c12m_s1_d3_t1"><span><strong>Matemática:</strong> Sistemas de numeração e sistema métrico</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s1_d3_t2" aria-checked="false">
+                    <label for="c12m_s1_d3_t2"><span><strong>Português:</strong> Interpretação de textos, funções da linguagem, classes gramaticais</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Quinta-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s1_d4_t1" aria-checked="false">
+                    <label for="c12m_s1_d4_t1"><span><strong>Química:</strong> Matéria, modelos atômicos e separação de misturas</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s1_d4_t2" aria-checked="false">
+                    <label for="c12m_s1_d4_t2"><span><strong>Biologia:</strong> Introdução à Biologia, método científico, água e sais minerais</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Sexta-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s1_d5_t1" aria-checked="false">
+                    <label for="c12m_s1_d5_t1"><span><strong>Química:</strong> Distribuição eletrônica</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s1_d5_t2" aria-checked="false">
+                    <label for="c12m_s1_d5_t2"><span><strong>Filosofia:</strong> Origem da filosofia e Pré-Socráticos</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Sábado</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s1_d6_t1" aria-checked="false">
+                    <label for="c12m_s1_d6_t1"><span>📝 Redação: Estrutura da dissertação</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s1_d6_t2" aria-checked="false">
+                    <label for="c12m_s1_d6_t2"><span>🔄 Revisão semanal</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco descanso">
+                <h3>Domingo</h3>
+                <p>☕ Descanso e recarga de energias.</p>
+            </div>
+        </div>
+
+        <!-- SEMANA 2 -->
+        <div class="semana-card">
+            <h2>🔹 SEMANA 2 — Fundamentos</h2>
+            <div class="dia-bloco">
+                <h3>Segunda-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s2_d1_t1" aria-checked="false">
+                    <label for="c12m_s2_d1_t1"><span><strong>Matemática:</strong> Conjuntos e operações</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s2_d1_t2" aria-checked="false">
+                    <label for="c12m_s2_d1_t2"><span><strong>História:</strong> Hebreus, Persas, Fenícios e Cretenses</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Terça-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s2_d2_t1" aria-checked="false">
+                    <label for="c12m_s2_d2_t1"><span><strong>Física:</strong> Ordem de grandeza</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s2_d2_t2" aria-checked="false">
+                    <label for="c12m_s2_d2_t2"><span><strong>Geografia:</strong> Fusos horários, movimentos da Terra e Lua</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Quarta-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s2_d3_t1" aria-checked="false">
+                    <label for="c12m_s2_d3_t1"><span><strong>Matemática:</strong> Raciocínio lógico e potenciação</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s2_d3_t2" aria-checked="false">
+                    <label for="c12m_s2_d3_t2"><span><strong>Artes:</strong> Arte na Pré-História e Idade Antiga</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Quinta-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s2_d4_t1" aria-checked="false">
+                    <label for="c12m_s2_d4_t1"><span><strong>Química:</strong> Classificação periódica e propriedades periódicas</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s2_d4_t2" aria-checked="false">
+                    <label for="c12m_s2_d4_t2"><span><strong>Biologia:</strong> Carboidratos, lipídios e colesterol</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Sexta-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s2_d5_t1" aria-checked="false">
+                    <label for="c12m_s2_d5_t1"><span><strong>Física:</strong> Movimento uniforme e MUV</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s2_d5_t2" aria-checked="false">
+                    <label for="c12m_s2_d5_t2"><span><strong>Sociologia:</strong> Surgimento da Sociologia e Comte</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Sábado</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s2_d6_t1" aria-checked="false">
+                    <label for="c12m_s2_d6_t1"><span>📝 Redação: Tema Cidadania</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s2_d6_t2" aria-checked="false">
+                    <label for="c12m_s2_d6_t2"><span>🔄 Revisão</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco descanso">
+                <h3>Domingo</h3>
+                <p>☕ Descanso e recarga de energias.</p>
+            </div>
+        </div>
+
+<!-- SEMANA 4 -->
+        <div class="semana-card">
+            <h2>🔹 SEMANA 4 fatoração e Roma antiga</h2>
+            <div class="dia-bloco">
+                <h3>Segunda-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s4_d1_t1" aria-checked="false">
+                    <label for="c12m_s4_d1_t1"><span><strong>Matemática:</strong> Produtos notáveis e fatoração</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s4_d1_t2" aria-checked="false">
+                    <label for="c12m_s4_d1_t2"><span><strong>História:</strong> Roma Antiga</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Terça-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s4_d2_t1" aria-checked="false">
+                    <label for="c12m_s4_d2_t1"><span><strong>Física:</strong> Lançamento horizontal e oblíquo</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s4_d2_t2" aria-checked="false">
+                    <label for="c12m_s4_d2_t2"><span><strong>Geografia:</strong> Relevo</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Quarta-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s4_d3_t1" aria-checked="false">
+                    <label for="c12m_s4_d3_t1"><span><strong>Matemática:</strong> Equações e sistemas do 1º grau</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s4_d3_t2" aria-checked="false">
+                    <label for="c12m_s4_d3_t2"><span><strong>Português:</strong> Charges e tirinhas</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Quinta-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s4_d4_t1" aria-checked="false">
+                    <label for="c12m_s4_d4_t1"><span><strong>Química:</strong> Forças intermoleculares</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s4_d4_t2" aria-checked="false">
+                    <label for="c12m_s4_d4_t2"><span><strong>Biologia:</strong> Vitaminas e ácidos nucleicos</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Sexta-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s4_d5_t1" aria-checked="false">
+                    <label for="c12m_s4_d5_t1"><span><strong>Física:</strong> Movimento circular</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s4_d5_t2" aria-checked="false">
+                    <label for="c12m_s4_d5_t2"><span><strong>Sociologia:</strong> Durkheim e Weber</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Sábado</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s4_d6_t1" aria-checked="false">
+                    <label for="c12m_s4_d6_t1"><span>📝 Simulado: Matemática e Natureza</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco descanso">
+                <h3>Domingo</h3>
+                <p>☕ Revisão dos erros e descanso.</p>
+            </div>
+        </div>
+
+        <!-- SEMANA 5 -->
+        <div class="semana-card">
+            <h2>🔹 SEMANA 5 Equações e Leis de Newton</h2>
+            <div class="dia-bloco">
+                <h3>Segunda-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s5_d1_t1" aria-checked="false">
+                    <label for="c12m_s5_d1_t1"><span><strong>Matemática:</strong> Equação do 2º grau</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s5_d1_t2" aria-checked="false">
+                    <label for="c12m_s5_d1_t2"><span><strong>História:</strong> Idade Média</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Terça-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s5_d2_t1" aria-checked="false">
+                    <label for="c12m_s5_d2_t1"><span><strong>Física:</strong> Leis de Newton</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s5_d2_t2" aria-checked="false">
+                    <label for="c12m_s5_d2_t2"><span><strong>Geografia:</strong> Rochas e estruturas geológicas</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Quarta-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s5_d3_t1" aria-checked="false">
+                    <label for="c12m_s5_d3_t1"><span><strong>Matemática:</strong> Divisibilidade e números primos</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s5_d3_t2" aria-checked="false">
+                    <label for="c12m_s5_d3_t2"><span><strong>Português:</strong> Pronomes</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Quinta-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s5_d4_t1" aria-checked="false">
+                    <label for="c12m_s5_d4_t1"><span><strong>Química:</strong> Radioatividade</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s5_d4_t2" aria-checked="false">
+                    <label for="c12m_s5_d4_t2"><span><strong>Biologia:</strong> Citologia e modelos celulares</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Sexta-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s5_d5_t1" aria-checked="false">
+                    <label for="c12m_s5_d5_t1"><span><strong>Química:</strong> Propriedades da matéria</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s5_d5_t2" aria-checked="false">
+                    <label for="c12m_s5_d5_t2"><span><strong>Filosofia:</strong> Aristóteles</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Sábado</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s5_d6_t1" aria-checked="false">
+                    <label for="c12m_s5_d6_t1"><span>📝 Redação: Impacto das mídias sociais</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s5_d6_t2" aria-checked="false">
+                    <label for="c12m_s5_d6_t2"><span>🔄 Revisão</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco descanso">
+                <h3>Domingo</h3>
+                <p>☕ Descanso e recarga de energias.</p>
+            </div>
+        </div>
+
+        <!-- SEMANA 6 -->
+        <div class="semana-card">
+            <h2>🔹 SEMANA 6 Aprofundamento</h2>
+            <div class="dia-bloco">
+                <h3>Segunda-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s6_d1_t1" aria-checked="false">
+                    <label for="c12m_s6_d1_t1"><span><strong>Matemática:</strong> MMC e MDC</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s6_d1_t2" aria-checked="false">
+                    <label for="c12m_s6_d1_t2"><span><strong>História:</strong> Absolutismo e Mercantilismo</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Terça-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s6_d2_t1" aria-checked="false">
+                    <label for="c12m_s6_d2_t1"><span><strong>Física:</strong> Máquinas simples</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s6_d2_t2" aria-checked="false">
+                    <label for="c12m_s6_d2_t2"><span><strong>Geografia:</strong> Relevo brasileiro</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Quarta-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s6_d3_t1" aria-checked="false">
+                    <label for="c12m_s6_d3_t1"><span><strong>Matemática:</strong> Razão e proporção</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s6_d3_t2" aria-checked="false">
+                    <label for="c12m_s6_d3_t2"><span><strong>Artes:</strong> Idade Média e Renascimento</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Quinta-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s6_d4_t1" aria-checked="false">
+                    <label for="c12m_s6_d4_t1"><span><strong>Química:</strong> Substâncias puras e misturas</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s6_d4_t2" aria-checked="false">
+                    <label for="c12m_s6_d4_t2"><span><strong>Biologia:</strong> Membrana plasmática</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Sexta-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s6_d5_t1" aria-checked="false">
+                    <label for="c12m_s6_d5_t1"><span><strong>Física:</strong> Força elástica e atrito</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s6_d5_t2" aria-checked="false">
+                    <label for="c12m_s6_d5_t2"><span><strong>Sociologia:</strong> Karl Marx</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Sábado</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s6_d6_t1" aria-checked="false">
+                    <label for="c12m_s6_d6_t1"><span>📝 Simulado ENEM antigo</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco descanso">
+                <h3>Domingo</h3>
+                <p>☕ Descanso e recarga de energias.</p>
+            </div>
+        </div>
+        <!-- SEMANA 7 -->
+        <div class="semana-card">
+            <h2>🔹 SEMANA 7 escala e Estática</h2>
+            <div class="dia-bloco">
+                <h3>Segunda-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s7_d1_t1" aria-checked="false">
+                    <label for="c12m_s7_d1_t1"><span><strong>Matemática:</strong> Regra de três e escala</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s7_d1_t2" aria-checked="false">
+                    <label for="c12m_s7_d1_t2"><span><strong>História:</strong> Reforma religiosa, Liberalismo e Iluminismo</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Terça-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s7_d2_t1" aria-checked="false">
+                    <label for="c12m_s7_d2_t1"><span><strong>Física:</strong> Estática</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s7_d2_t2" aria-checked="false">
+                    <label for="c12m_s7_d2_t2"><span><strong>Geografia:</strong> Recursos minerais e solos</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Quarta-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s7_d3_t1" aria-checked="false">
+                    <label for="c12m_s7_d3_t1"><span><strong>Matemática:</strong> Porcentagem</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s7_d3_t2" aria-checked="false">
+                    <label for="c12m_s7_d3_t2"><span><strong>Português:</strong> Gêneros literários e funções da linguagem</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Quinta-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s7_d4_t1" aria-checked="false">
+                    <label for="c12m_s7_d4_t1"><span><strong>Química:</strong> Materiais de laboratório e separação de misturas</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s7_d4_t2" aria-checked="false">
+                    <label for="c12m_s7_d4_t2"><span><strong>Biologia:</strong> Citoplasma e organelas</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Sexta-feira</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s7_d5_t1" aria-checked="false">
+                    <label for="c12m_s7_d5_t1"><span><strong>Química:</strong> Tratamento de água e esgoto</span></label>
+                </div>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s7_d5_t2" aria-checked="false">
+                    <label for="c12m_s7_d5_t2"><span><strong>Filosofia:</strong> Helenística e Medieval</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco">
+                <h3>Sábado</h3>
+                <div class="tarefa">
+                    <input type="checkbox" id="c12m_s7_d6_t1" aria-checked="false">
+                    <label for="c12m_s7_d6_t1"><span>📝 Simulado Natureza e Exatas</span></label>
+                </div>
+            </div>
+            <div class="dia-bloco descanso">
+                <h3>Domingo</h3>
+                <p>☕ Descanso e recarga de energias.</p>
+            </div>
+        </div>
+        <!-- SEMANA 8 --><div class="semana-card">
+    <h2>🔹 SEMANA 8 — Aprofundamento</h2><div class="dia-bloco">
+    <h3>Segunda-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s8_d1_t1">
+        <label for="c12m_s8_d1_t1">
+            <span><strong>Matemática:</strong> Juros simples e compostos</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s8_d1_t2">
+        <label for="c12m_s8_d1_t2">
+            <span><strong>História:</strong> Maias, Astecas e Incas</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Terça-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s8_d2_t1">
+        <label for="c12m_s8_d2_t1">
+            <span><strong>Física:</strong> Centro de massa e estática</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s8_d2_t2">
+        <label for="c12m_s8_d2_t2">
+            <span><strong>Geografia:</strong> Recursos hídricos e bacias brasileiras</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Quarta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s8_d3_t1">
+        <label for="c12m_s8_d3_t1">
+            <span><strong>Matemática:</strong> Teoria dos conjuntos</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s8_d3_t2">
+        <label for="c12m_s8_d3_t2">
+            <span><strong>Português:</strong> Questões aplicadas</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Quinta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s8_d4_t1">
+        <label for="c12m_s8_d4_t1">
+            <span><strong>Química:</strong> Ácidos</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s8_d4_t2">
+        <label for="c12m_s8_d4_t2">
+            <span><strong>Biologia:</strong> Plastos, cloroplastos e vacúolos</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Sexta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s8_d5_t1">
+        <label for="c12m_s8_d5_t1">
+            <span><strong>Física:</strong> Dinâmica circular</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s8_d5_t2">
+        <label for="c12m_s8_d5_t2">
+            <span><strong>Sociologia:</strong> Sociologia brasileira</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Sábado</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s8_d6_t1">
+        <label for="c12m_s8_d6_t1">
+            <span>📝 Redação: Juventude no século XXI</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s8_d6_t2">
+        <label for="c12m_s8_d6_t2">
+            <span>🔄 Revisão dos conteúdos da semana</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco descanso">
+    <h3>Domingo</h3>
+    <p>☕ Descanso e recarga de energias.</p>
+</div>
+
+</div>
+<!-- SEMANA 9 --><div class="semana-card">
+    <h2>🔹 SEMANA 9 — Funções e transformações</h2><div class="dia-bloco">
+    <h3>Segunda-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s9_d1_t1">
+        <label for="c12m_s9_d1_t1">
+            <span><strong>Matemática:</strong> Funções</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s9_d1_t2">
+        <label for="c12m_s9_d1_t2">
+            <span><strong>História:</strong> Revolução Industrial</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Terça-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s9_d2_t1">
+        <label for="c12m_s9_d2_t1">
+            <span><strong>Física:</strong> Impulso e quantidade de movimento</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s9_d2_t2">
+        <label for="c12m_s9_d2_t2">
+            <span><strong>Geografia:</strong> Climas e ventos</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Quarta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s9_d3_t1">
+        <label for="c12m_s9_d3_t1">
+            <span><strong>Matemática:</strong> Função composta e inversa</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s9_d3_t2">
+        <label for="c12m_s9_d3_t2">
+            <span><strong>Artes:</strong> Barroco e Rococó</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Quinta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s9_d4_t1">
+        <label for="c12m_s9_d4_t1">
+            <span><strong>Química:</strong> Sais</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s9_d4_t2">
+        <label for="c12m_s9_d4_t2">
+            <span><strong>Biologia:</strong> Respiração celular e fermentação</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Sexta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s9_d5_t1">
+        <label for="c12m_s9_d5_t1">
+            <span><strong>Física:</strong> Colisões</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s9_d5_t2">
+        <label for="c12m_s9_d5_t2">
+            <span><strong>Sociologia:</strong> Globalização</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Sábado</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s9_d6_t1">
+        <label for="c12m_s9_d6_t1">
+            <span>📝 Simulado</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s9_d6_t2">
+        <label for="c12m_s9_d6_t2">
+            <span>🔄 Correção e revisão dos erros</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco descanso">
+    <h3>Domingo</h3>
+    <p>☕ Descanso e recarga de energias.</p>
+</div>
+
+</div><!-- SEMANA 10 --><div class="semana-card">
+    <h2>🔹 SEMANA 10 — Aprofundamento</h2><div class="dia-bloco">
+    <h3>Segunda-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s10_d1_t1">
+        <label for="c12m_s10_d1_t1">
+            <span><strong>Matemática:</strong> Função afim e função quadrática</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s10_d1_t2">
+        <label for="c12m_s10_d1_t2">
+            <span><strong>História:</strong> Revolução Francesa</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Terça-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s10_d2_t1">
+        <label for="c12m_s10_d2_t1">
+            <span><strong>Física:</strong> Gravitação universal e leis de Kepler</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s10_d2_t2">
+        <label for="c12m_s10_d2_t2">
+            <span><strong>Geografia:</strong> Vegetação e biomas brasileiros</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Quarta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s10_d3_t1">
+        <label for="c12m_s10_d3_t1">
+            <span><strong>Matemática:</strong> Equações e inequações do 1º e 2º grau</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s10_d3_t2">
+        <label for="c12m_s10_d3_t2">
+            <span><strong>Português/Literatura:</strong> Trovadorismo e Humanismo</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Quinta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s10_d4_t1">
+        <label for="c12m_s10_d4_t1">
+            <span><strong>Química:</strong> Bases e hidróxidos</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s10_d4_t2">
+        <label for="c12m_s10_d4_t2">
+            <span><strong>Biologia:</strong> Fotossíntese e quimiossíntese</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Sexta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s10_d5_t1">
+        <label for="c12m_s10_d5_t1">
+            <span><strong>Física:</strong> Hidrostática: pressão, densidade e empuxo</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s10_d5_t2">
+        <label for="c12m_s10_d5_t2">
+            <span><strong>Sociologia:</strong> Cultura, identidade e diversidade cultural</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Sábado</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s10_d6_t1">
+        <label for="c12m_s10_d6_t1">
+            <span>📝 Redação: Desafios da educação no Brasil</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s10_d6_t2">
+        <label for="c12m_s10_d6_t2">
+            <span>🔄 Revisão dos conteúdos da semana</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco descanso">
+    <h3>Domingo</h3>
+    <p>☕ Descanso e recarga de energias.</p>
+</div>
+
+</div>
+<!-- SEMANA 11 --><div class="semana-card">
+    <h2>🔹 SEMANA 11 — Funções, Revoluções e Biologia Celular</h2><div class="dia-bloco">
+    <h3>Segunda-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s11_d1_t1">
+        <label for="c12m_s11_d1_t1">
+            <span><strong>Matemática:</strong> Função exponencial</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s11_d1_t2">
+        <label for="c12m_s11_d1_t2">
+            <span><strong>História:</strong> Revolução Francesa</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Terça-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s11_d2_t1">
+        <label for="c12m_s11_d2_t1">
+            <span><strong>Física:</strong> Leis de Kepler</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s11_d2_t2">
+        <label for="c12m_s11_d2_t2">
+            <span><strong>Geografia:</strong> Climas do Brasil</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Quarta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s11_d3_t1">
+        <label for="c12m_s11_d3_t1">
+            <span><strong>Matemática:</strong> Logaritmos</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s11_d3_t2">
+        <label for="c12m_s11_d3_t2">
+            <span><strong>Artes:</strong> Neoclassicismo e Romantismo</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Quinta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s11_d4_t1">
+        <label for="c12m_s11_d4_t1">
+            <span><strong>Química:</strong> Reações inorgânicas</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s11_d4_t2">
+        <label for="c12m_s11_d4_t2">
+            <span><strong>Biologia:</strong> Mitose e meiose</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Sexta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s11_d5_t1">
+        <label for="c12m_s11_d5_t1">
+            <span><strong>Física:</strong> Gravitação universal</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s11_d5_t2">
+        <label for="c12m_s11_d5_t2">
+            <span><strong>Sociologia:</strong> Estratificação social</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Sábado</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s11_d6_t1">
+        <label for="c12m_s11_d6_t1">
+            <span>📝 Simulado completo ENEM</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s11_d6_t2">
+        <label for="c12m_s11_d6_t2">
+            <span>🔄 Correção e análise dos erros</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco descanso">
+    <h3>Domingo</h3>
+    <p>☕ Correção e descanso.</p>
+</div>
+
+</div><!-- SEMANA 12 --><div class="semana-card">
+    <h2>🔹 SEMANA 12 — Funções, Hidrostática e Genética</h2><div class="dia-bloco">
+    <h3>Segunda-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s12_d1_t1">
+        <label for="c12m_s12_d1_t1">
+            <span><strong>Matemática:</strong> Função modular e funções trigonométricas</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s12_d1_t2">
+        <label for="c12m_s12_d1_t2">
+            <span><strong>História:</strong> Era Napoleônica e Congresso de Viena</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Terça-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s12_d2_t1">
+        <label for="c12m_s12_d2_t1">
+            <span><strong>Física:</strong> Hidrostática — densidade, pressão e Teorema de Stevin</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s12_d2_t2">
+        <label for="c12m_s12_d2_t2">
+            <span><strong>Geografia:</strong> Biomas terrestres e revisão — cartografia e fusos horários</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Quarta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s12_d3_t1">
+        <label for="c12m_s12_d3_t1">
+            <span><strong>Matemática:</strong> Matrizes e determinantes</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s12_d3_t2">
+        <label for="c12m_s12_d3_t2">
+            <span><strong>Literatura:</strong> Trovadorismo e Quinhentismo</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Quinta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s12_d4_t1">
+        <label for="c12m_s12_d4_t1">
+            <span><strong>Química:</strong> Grandezas químicas e fórmulas químicas</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s12_d4_t2">
+        <label for="c12m_s12_d4_t2">
+            <span><strong>Biologia:</strong> Gametogênese, mutações e anomalias cromossômicas</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Sexta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s12_d5_t1">
+        <label for="c12m_s12_d5_t1">
+            <span><strong>Química:</strong> Balanceamento de reações</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s12_d5_t2">
+        <label for="c12m_s12_d5_t2">
+            <span><strong>Filosofia:</strong> Iluminismo</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Sábado</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s12_d6_t1">
+        <label for="c12m_s12_d6_t1">
+            <span>📝 Simulado ENEM antigo — Exatas e Natureza</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s12_d6_t2">
+        <label for="c12m_s12_d6_t2">
+            <span>🔄 Correção e revisão dos erros</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco descanso">
+    <h3>Domingo</h3>
+    <p>☕ Descanso e recarga de energias.</p>
+</div>
+
+</div>
+<!-- SEMANA 13 --><div class="semana-card">
+    <h2>🔹 SEMANA 13 — Geometria e Genética</h2><div class="dia-bloco">
+    <h3>Segunda-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s13_d1_t1">
+        <label for="c12m_s13_d1_t1">
+            <span><strong>Matemática:</strong> Geometria plana – Ângulos, triângulo equilátero e semelhança</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s13_d1_t2">
+        <label for="c12m_s13_d1_t2">
+            <span><strong>História:</strong> Independência da América Espanhola</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Terça-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s13_d2_t1">
+        <label for="c12m_s13_d2_t1">
+            <span><strong>Física:</strong> Experiência de Torricelli, Pascal e prensa hidráulica</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s13_d2_t2">
+        <label for="c12m_s13_d2_t2">
+            <span><strong>Geografia:</strong> Ecossistemas brasileiros</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Quarta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s13_d3_t1">
+        <label for="c12m_s13_d3_t1">
+            <span><strong>Matemática:</strong> Teorema de Tales</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s13_d3_t2">
+        <label for="c12m_s13_d3_t2">
+            <span><strong>Língua Estrangeira:</strong> Letras de músicas e poemas</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Quinta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s13_d4_t1">
+        <label for="c12m_s13_d4_t1">
+            <span><strong>Química:</strong> Leis ponderais</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s13_d4_t2">
+        <label for="c12m_s13_d4_t2">
+            <span><strong>Biologia:</strong> Genética – Código genético e conceitos básicos</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Sexta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s13_d5_t1">
+        <label for="c12m_s13_d5_t1">
+            <span><strong>Física:</strong> Empuxo e Princípio de Arquimedes</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s13_d5_t2">
+        <label for="c12m_s13_d5_t2">
+            <span><strong>Sociologia:</strong> Poder, política e Estado</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Sábado</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s13_d6_t1">
+        <label for="c12m_s13_d6_t1">
+            <span>📝 Redação: Mobilidade urbana</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s13_d6_t2">
+        <label for="c12m_s13_d6_t2">
+            <span>🔄 Revisão semanal</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco descanso">
+    <h3>Domingo</h3>
+    <p>☕ Descanso e recarga de energias.</p>
+</div>
+
+</div><!-- SEMANA 14 --><div class="semana-card">
+    <h2>🔹 SEMANA 14 — Trigonometria e Estequiometria</h2><div class="dia-bloco">
+    <h3>Segunda-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s14_d1_t1">
+        <label for="c12m_s14_d1_t1">
+            <span><strong>Matemática:</strong> Triângulo retângulo – Relações métricas</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s14_d1_t2">
+        <label for="c12m_s14_d1_t2">
+            <span><strong>História:</strong> Revoluções liberais de 1830 e 1848</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Terça-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s14_d2_t1">
+        <label for="c12m_s14_d2_t1">
+            <span><strong>Física:</strong> Óptica – Luz, câmara escura e princípios da óptica geométrica</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s14_d2_t2">
+        <label for="c12m_s14_d2_t2">
+            <span><strong>Geografia:</strong> Problemas ambientais e conferências ambientais</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Quarta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s14_d3_t1">
+        <label for="c12m_s14_d3_t1">
+            <span><strong>Matemática:</strong> Relações trigonométricas</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s14_d3_t2">
+        <label for="c12m_s14_d3_t2">
+            <span><strong>Português:</strong> Pontuação e uso da vírgula</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Quinta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s14_d4_t1">
+        <label for="c12m_s14_d4_t1">
+            <span><strong>Química:</strong> Introdução à estequiometria</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s14_d4_t2">
+        <label for="c12m_s14_d4_t2">
+            <span><strong>Biologia:</strong> Primeira Lei de Mendel e heredogramas</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Sexta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s14_d5_t1">
+        <label for="c12m_s14_d5_t1">
+            <span><strong>Química:</strong> Reagente limitante e reagente em excesso</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s14_d5_t2">
+        <label for="c12m_s14_d5_t2">
+            <span><strong>Filosofia:</strong> Idealismo Alemão</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Sábado</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s14_d6_t1">
+        <label for="c12m_s14_d6_t1">
+            <span>📝 Redação: Meio ambiente e sustentabilidade</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s14_d6_t2">
+        <label for="c12m_s14_d6_t2">
+            <span>🔄 Revisão geral da semana</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco descanso">
+    <h3>Domingo</h3>
+    <p>☕ Descanso e recarga de energias.</p>
+</div>
+
+</div><!-- SEMANA 15 --><div class="semana-card">
+    <h2>🔹 SEMANA 15 — Consolidação e Revisão do Bloco Inicial</h2><div class="dia-bloco">
+    <h3>Segunda-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s15_d1_t1">
+        <label for="c12m_s15_d1_t1">
+            <span><strong>Matemática:</strong> Lei dos Senos e Lei dos Cossenos</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s15_d1_t2">
+        <label for="c12m_s15_d1_t2">
+            <span><strong>História:</strong> Unificação Italiana e Alemã</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Terça-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s15_d2_t1">
+        <label for="c12m_s15_d2_t1">
+            <span><strong>Física:</strong> Reflexão da luz e espelhos planos</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s15_d2_t2">
+        <label for="c12m_s15_d2_t2">
+            <span><strong>Geografia:</strong> Domínios morfoclimáticos do Brasil</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Quarta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s15_d3_t1">
+        <label for="c12m_s15_d3_t1">
+            <span><strong>Matemática:</strong> Polígonos regulares e áreas de figuras planas</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s15_d3_t2">
+        <label for="c12m_s15_d3_t2">
+            <span><strong>Português:</strong> Concordância verbal e nominal</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Quinta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s15_d4_t1">
+        <label for="c12m_s15_d4_t1">
+            <span><strong>Química:</strong> Rendimento de reações e pureza de reagentes</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s15_d4_t2">
+        <label for="c12m_s15_d4_t2">
+            <span><strong>Biologia:</strong> Segunda Lei de Mendel e linkage</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Sexta-feira</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s15_d5_t1">
+        <label for="c12m_s15_d5_t1">
+            <span><strong>Física:</strong> Espelhos esféricos (côncavos e convexos)</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s15_d5_t2">
+        <label for="c12m_s15_d5_t2">
+            <span><strong>Sociologia:</strong> Movimentos sociais e cidadania</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco">
+    <h3>Sábado</h3>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s15_d6_t1">
+        <label for="c12m_s15_d6_t1">
+            <span>📝 Simulado Integrado Parte 1 (Semanas 1 a 15)</span>
+        </label>
+    </div>
+
+    <div class="tarefa">
+        <input type="checkbox" id="c12m_s15_d6_t2">
+        <label for="c12m_s15_d6_t2">
+            <span>🔄 Correção e análise dos erros</span>
+        </label>
+    </div>
+</div>
+
+<div class="dia-bloco descanso">
+    <h3>Domingo</h3>
+    <p>☕ Descanso </p>
+</div>
+
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    // =========================================================
+    // 1. SALVAMENTO DO PROGRESSO DAS TAREFAS
+    // =========================================================
+
+    const checkboxes = document.querySelectorAll(
+        '.tarefa input[type="checkbox"]'
+    );
+
+    checkboxes.forEach(chk => {
+
+        if (!chk.id) return;
+
+        // Recupera o estado salvo
+        const statusSalvo = localStorage.getItem(chk.id);
+
+        if (statusSalvo === "true") {
+            chk.checked = true;
+            chk.closest(".tarefa")?.classList.add("concluido");
+        }
+
+        // Salva quando o usuário marca/desmarca
+        chk.addEventListener("change", () => {
+
+            const status = chk.checked;
+
+            localStorage.setItem(chk.id, status);
+
+            const tarefa = chk.closest(".tarefa");
+
+            if (tarefa) {
+                tarefa.classList.toggle("concluido", status);
+            }
+        });
+    });
+
+
+    // =========================================================
+    // 2. WIDGET DE ACESSIBILIDADE
+    // =========================================================
+
+    const toggleBtn = document.getElementById("accessibility-toggle");
+    const panel = document.getElementById("accessibility-menu");
+
+    const btnContrast =
+        document.getElementById("btn-high-contrast");
+
+    const btnIncrease =
+        document.getElementById("btn-increase-font");
+
+    const btnDecrease =
+        document.getElementById("btn-decrease-font");
+
+    const btnReset =
+        document.getElementById("btn-reset-accessibility");
+
+
+    // Verifica se os elementos existem
+    if (
+        !toggleBtn ||
+        !panel ||
+        !btnContrast ||
+        !btnIncrease ||
+        !btnDecrease ||
+        !btnReset
+    ) {
+        console.warn(
+            "Algum elemento do widget de acessibilidade não foi encontrado."
+        );
+
+        return;
+    }
+
+
+    // =========================================================
+    // 3. CONFIGURAÇÃO INICIAL
+    // =========================================================
+
+    let currentFontSize =
+        Number(localStorage.getItem("aeda-font-size")) || 100;
+
+    const contrasteSalvo =
+        localStorage.getItem("aeda-high-contrast") === "true";
+
+
+    // Aplica tamanho salvo
+    document.documentElement.style.fontSize =
+        currentFontSize + "%";
+
+
+    // Aplica contraste salvo
+    if (contrasteSalvo) {
+        document.body.classList.add("high-contrast");
+
+        btnContrast.setAttribute("aria-pressed", "true");
+
+        btnContrast.textContent =
+            "Desativar Alto Contraste";
+    }
+
+
+    // =========================================================
+    // 4. ABRIR E FECHAR MENU
+    // =========================================================
+
+    toggleBtn.addEventListener("click", () => {
+
+        const isExpanded =
+            toggleBtn.getAttribute("aria-expanded") === "true";
+
+        toggleBtn.setAttribute(
+            "aria-expanded",
+            String(!isExpanded)
+        );
+
+        panel.hidden = isExpanded;
+    });
+
+
+    // Fecha o menu ao clicar fora
+    document.addEventListener("click", (event) => {
+
+        const widget =
+            document.querySelector(".accessibility-widget");
+
+        if (
+            widget &&
+            !widget.contains(event.target)
+        ) {
+            toggleBtn.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+
+            panel.hidden = true;
+        }
+    });
+
+
+    // =========================================================
+    // 5. ALTO CONTRASTE
+    // =========================================================
+
+    btnContrast.addEventListener("click", () => {
+
+        document.body.classList.toggle("high-contrast");
+
+        const isActive =
+            document.body.classList.contains("high-contrast");
+
+        btnContrast.setAttribute(
+            "aria-pressed",
+            String(isActive)
+        );
+
+        btnContrast.textContent = isActive
+            ? "Desativar Alto Contraste"
+            : "Alto Contraste";
+
+        localStorage.setItem(
+            "aeda-high-contrast",
+            isActive
+        );
+    });
+
+
+    // =========================================================
+    // 6. AUMENTAR FONTE
+    // =========================================================
+
+    btnIncrease.addEventListener("click", () => {
+
+        if (currentFontSize < 150) {
+
+            currentFontSize += 10;
+
+            document.documentElement.style.fontSize =
+                currentFontSize + "%";
+
+            localStorage.setItem(
+                "aeda-font-size",
+                currentFontSize
+            );
+        }
+    });
+
+
+    // =========================================================
+    // 7. DIMINUIR FONTE
+    // =========================================================
+
+    btnDecrease.addEventListener("click", () => {
+
+        if (currentFontSize > 90) {
+
+            currentFontSize -= 10;
+
+            document.documentElement.style.fontSize =
+                currentFontSize + "%";
+
+            localStorage.setItem(
+                "aeda-font-size",
+                currentFontSize
+            );
+        }
+    });
+        // =========================================================
+    // 8. RESTAURAR ACESSIBILIDADE
+    // =========================================================
+
+    btnReset.addEventListener("click", () => {
+
+        // Fonte
+        currentFontSize = 100;
+
+        document.documentElement.style.fontSize =
+            "100%";
+
+        localStorage.setItem(
+            "aeda-font-size",
+            "100"
+        );
+
+
+        // Alto contraste
+        document.body.classList.remove(
+            "high-contrast"
+        );
+
+        btnContrast.setAttribute(
+            "aria-pressed",
+            "false"
+        );
+
+        btnContrast.textContent =
+            "Alto Contraste";
+
+        localStorage.setItem(
+            "aeda-high-contrast",
+            "false"
+        );
+    });
+
+});
+</script>

@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <!-- Importação da fonte OpenDyslexic -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/open-dyslexic.css">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEDA - Login e Boas-vindas</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            letter-spacing: 0.03em; /* Espaçamento leve para dislexia */
+        }
+
+        /* Classe utilitária para leitores de tela */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Link para pular direto para o login (Teclado/Leitores de tela) */
+        .skip-link {
+            position: absolute;
+            top: -100px;
+            left: 10px;
+            background: #ffcc00;
+            color: #000000;
+            padding: 12px 16px;
+            z-index: 10000;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .skip-link:focus {
+            top: 10px;
+        }
+
+        /* Fundo geral em Azul (Pantone 286 C) */
+        body {
+            background-color: #0033A0;
+            color: #ffffff;
+            padding: 20px;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        main {
+            width: 100%;
+            max-width: 650px;
+        }
+
+        /* Cards em branco */
+        .card {
+            background-color: #ffffff;
+            color: #1c1c1c;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #0033A0;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 1.3rem;
+            color: #0033A0;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 6px;
+        }
+
+        p {
+            color: #222222;
+            font-size: 1rem;
+            margin-bottom: 12px;
+        }
+
+        /* Lista Acessível */
+        ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 10px;
+        }
+
+        ul li {
+            background-color: #f0f4f8;
+            color: #1c1c1c;
+            margin-bottom: 8px;
+            padding: 10px 14px;
+            border-left: 5px solid #0033A0;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        /* Formulários */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            color: #0033A0;
+            margin-bottom: 6px;
+            font-size: 1rem;
+        }
+
+        .obrigatorio {
+            color: #c53030;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #595959;
+            border-radius: 6px;
+            font-size: 1rem;
+            color: #1c1c1c;
+            background-color: #ffffff;
+        }
+
+        /* Foco visual para teclado e leitor de tela */
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        .btn-primary:focus-visible,
+        .btn-secondary:focus-visible,
+        .skip-link:focus,
+        .accessibility-btn:focus-visible,
+        .acess-option-btn:focus-visible {
+            outline: 3px solid #ffcc00 !important;
+            outline-offset: 3px;
+        }
+
+        /* Botões */
+        .btn-primary,
+        .btn-secondary {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+            box-sizing: border-box;
+        }
+
+        .btn-primary {
+            background-color: #0033A0;
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: #002266;
+        }
+
+        .btn-secondary {
+            background-color: #e6ecf8;
+            color: #002266;
+            margin-top: 15px;
+            border: 2px solid #0033A0;
+        }
+
+        .btn-secondary:hover {
+            background-color: #d0ddf5;
+        }
+
+        /* Caixa de feedback/alerta acessível */
+        .mensagem-status {
+            display: none;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 18px;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .mensagem-status.erro {
+            display: block;
+            background-color: #fff5f5;
+            color: #c53030;
+            border: 2px solid #c53030;
+        }
+
+        .mensagem-status.sucesso {
+            display: block;
+            background-color: #f0fff4;
+            color: #276749;
+            border: 2px solid #276749;
+        }
+
+        /* Posicionamento do Widget Flutuante */
+        .accessibility-widget {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        /* Botão do ícone ♿ */
+        .accessibility-btn {
+            background-color: #ffffff;
+            color: #0033A0;
+            border: 3px solid #0033A0;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .accessibility-btn:hover {
+            background-color: #f0f4f8;
+            transform: scale(1.05);
+        }
+
+        /* Painel de opções que abre ao clicar */
+        .accessibility-panel {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background-color: #ffffff;
+            color: #1c1c1c;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            width: 240px;
+            border: 2px solid #0033A0;
+        }
+
+        .accessibility-panel h2 {
+            font-size: 1.1rem;
+            color: #0033A0;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 6px;
+            margin-top: 0;
+        }
+
+        /* Botões internos do menu */
+        .accessibility-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .acess-option-btn {
+            background-color: #f0f4f8;
+            color: #0033A0;
+            border: 1px solid #0033A0;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: left;
+            transition: background-color 0.2s;
+        }
+
+        .acess-option-btn:hover {
+            background-color: #d0ddf5;
+        }
+
+        /* --------------------------------------------------
+           ESTILOS DE ALTO CONTRASTE
+        -------------------------------------------------- */
+        body.high-contrast {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+        }
+
+        body.high-contrast .card {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+            border: 2px solid #ffff00 !important;
+            box-shadow: none !important;
+        }
+
+        body.high-contrast h1, 
+        body.high-contrast h2, 
+        body.high-contrast label, 
+        body.high-contrast .skip-link {
+            color: #ffff00 !important;
+        }
+
+        body.high-contrast p, 
+        body.high-contrast ul li {
+            color: #ffffff !important;
+            background-color: #1a1a1a !important;
+            border-color: #ffff00 !important;
+        }
+
+        body.high-contrast input {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+            border: 2px solid #ffff00 !important;
+        }
+
+        body.high-contrast .accessibility-btn,
+        body.high-contrast .accessibility-panel {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+            border-color: #ffff00 !important;
+        }
+
+        body.high-contrast .acess-option-btn {
+            background-color: #1a1a1a !important;
+            color: #ffff00 !important;
+            border-color: #ffff00 !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Link de Acessibilidade: Salta a apresentação e vai direto ao login -->
+    <a href="#login-section" class="skip-link">Pular para o Formulário de Login</a>
+
+    <!-- Widget de Acessibilidade Flutuante -->
+    <div class="accessibility-widget" role="region" aria-label="Menu de Acessibilidade">
+        <button id="accessibility-toggle" class="accessibility-btn" aria-expanded="false" aria-controls="accessibility-menu" title="Abrir menu de acessibilidade">
+            <span aria-hidden="true">♿</span>
+            <span class="sr-only">Acessibilidade</span>
+        </button>
+
+        <div id="accessibility-menu" class="accessibility-panel" hidden>
+            <h2>Acessibilidade</h2>
+            <div class="accessibility-options">
+                <button id="btn-increase-font" class="acess-option-btn">Aumentar Fonte</button>
+                <button id="btn-decrease-font" class="acess-option-btn">Diminuir Fonte</button>
+                <button id="btn-high-contrast" class="acess-option-btn" aria-pressed="false">Alto Contraste</button>
+                <button id="btn-reset-accessibility" class="acess-option-btn">Restaurar Padrão</button>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <!-- Card 1: Informações e Boas-Vindas -->
+        <section class="card" aria-labelledby="titulo-principal">
+            <h1 id="titulo-principal">Página Inicial – AEDA</h1>
+            
+            <h2>Bem-vindo, futuro calouro!</h2>
+            <p>
+                Acreditamos que a acessibilidade é um direito e que todos os estudantes
+                merecem acesso igualitário ao conhecimento.
+            </p>
+
+            <h2>Mas o que é a AEDA?</h2>
+            <p>
+                A AEDA (Academia de Estudo Digital Acessível) é uma plataforma criada
+                para auxiliar estudantes com deficiência na preparação para o ENEM
+                de forma gratuita e acessível.
+            </p>
+
+            <h2>O que você encontra na AEDA?</h2>
+            <ul>
+                <li>Cronogramas de estudo</li>
+                <li>Flashcards</li>
+                <li>Simulados</li>
+                <li>Banco de questões</li>
+                <li>Agente de Inteligência Artificial para auxiliar nos estudos</li>
+            </ul>
+
+            <a href="Cadastro.html" class="btn-secondary">
+                NÃO TEM CONTA? CADASTRE-SE
+            </a>
+        </section>
+
+        <!-- Card 2: Formulario de Login -->
+        <section id="login-section" class="card" aria-labelledby="login-titulo" tabindex="-1">
+            <h2 id="login-titulo">Já tem conta? Entre</h2>
+
+            <!-- Região de alertas para leitores de tela -->
+            <div id="mensagem-feedback" class="mensagem-status" role="alert" aria-live="assertive" tabindex="-1"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">
+                        E-mail <span class="obrigatorio" aria-hidden="true">*</span>
+                    </label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        required 
+                        aria-required="true"
+                        placeholder="seuemail@exemplo.com" 
+                        autocomplete="email"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="senha">
+                        Senha <span class="obrigatorio" aria-hidden="true">*</span>
+                    </label>
+                    <input 
+                        type="password" 
+                        id="senha" 
+                        required 
+                        aria-required="true"
+                        placeholder="Digite sua senha" 
+                        autocomplete="current-password"
+                    >
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    ENTRAR
+                </button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        // Lógica do Formulário de Login
+        const loginForm = document.getElementById("loginForm");
+        const feedback = document.getElementById("mensagem-feedback");
+
+        function exibirMensagem(texto, tipo) {
+            feedback.textContent = texto;
+            feedback.className = `mensagem-status ${tipo}`;
+            feedback.focus();
+        }
+
+        loginForm.addEventListener("submit", function(event){
+            event.preventDefault();
+
+            const emailDigitado = document.getElementById("email").value.trim();
+            const senhaDigitada = document.getElementById("senha").value;
+
+            const usuario = JSON.parse(
+                localStorage.getItem("usuarioAEDA")
+            );
+
+            if(!usuario){
+                exibirMensagem("Nenhuma conta encontrada. Por favor, faça seu cadastro primeiro.", "erro");
+                return;
+            }
+
+            if(
+                emailDigitado === usuario.email &&
+                senhaDigitada === usuario.senha
+            ){
+                localStorage.setItem(
+                    "usuarioAEDA_Logado",
+                    JSON.stringify(usuario)
+                );
+
+                exibirMensagem("Login realizado com sucesso! Redirecionando...", "sucesso");
+                
+                setTimeout(() => {
+                    window.location.href = "Dashboard.html";
+                }, 1500);
+            } else {
+                exibirMensagem("E-mail ou senha incorretos. Verifique seus dados e tente novamente.", "erro");
+            }
+        });
+
+        // Lógica do Widget de Acessibilidade
+        const toggleBtn = document.getElementById("accessibility-toggle");
+        const panel = document.getElementById("accessibility-menu");
+        const btnContrast = document.getElementById("btn-high-contrast");
+        const btnIncrease = document.getElementById("btn-increase-font");
+        const btnDecrease = document.getElementById("btn-decrease-font");
+        const btnReset = document.getElementById("btn-reset-accessibility");
+
+        let currentFontSize = 100;
+
+        toggleBtn.addEventListener("click", () => {
+            const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
+            toggleBtn.setAttribute("aria-expanded", !isExpanded);
+            panel.hidden = isExpanded;
+        });
+
+        document.addEventListener("click", (event) => {
+            if (!document.querySelector(".accessibility-widget").contains(event.target)) {
+                toggleBtn.setAttribute("aria-expanded", "false");
+                panel.hidden = true;
+            }
+        });
+
+        btnContrast.addEventListener("click", () => {
+            document.body.classList.toggle("high-contrast");
+            const isActive = document.body.classList.contains("high-contrast");
+            btnContrast.setAttribute("aria-pressed", isActive);
+            btnContrast.textContent = isActive ? "Desativar Alto Contraste" : "Alto Contraste";
+        });
+
+        btnIncrease.addEventListener("click", () => {
+            if (currentFontSize < 150) {
+                currentFontSize += 10;
+                document.documentElement.style.fontSize = currentFontSize + "%";
+            }
+        });
+
+        btnDecrease.addEventListener("click", () => {
+            if (currentFontSize > 90) {
+                currentFontSize -= 10;
+                document.documentElement.style.fontSize = currentFontSize + "%";
+            }
+        });
+
+        btnReset.addEventListener("click", () => {
+            currentFontSize = 100;
+            document.documentElement.style.fontSize = "100%";
+            document.body.classList.remove("high-contrast");
+            btnContrast.setAttribute("aria-pressed", "false");
+            btnContrast.textContent = "Alto Contraste";
+        });
+    </script>
+
+    <!-- Plugin de Libras (Hand Talk) -->
+    <script src="https://plugin.handtalk.me/web/latest/handtalk.min.js"></script>
+    <script>
+      var ht = new HT({
+        token: "SEU_TOKEN_AQUI"
+      });
+    </script>
+
+</body>
+</html>

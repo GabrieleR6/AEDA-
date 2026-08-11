@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AEDA - Daniel Danilo (DD)</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background-color: #0033a0;
+            color: #333333;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 750px;
+        }
+
+        /* =========================
+           BOTÃO VOLTAR E SKIP LINK
+        ========================= */
+
+        .skip-link {
+            position: absolute;
+            top: -100px;
+            left: 10px;
+            background: #ffcc00;
+            color: #000000;
+            padding: 12px 16px;
+            z-index: 10000;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .skip-link:focus {
+            top: 10px;
+        }
+
+        .voltar-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            background-color: #ffffff;
+            color: #6f42c1;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 18px;
+            border-radius: 6px;
+        }
+
+        .voltar-link:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* =========================
+           CARTÃO PRINCIPAL
+        ========================= */
+
+        .dd-card {
+            background-color: #ffffff;
+            border-radius: 14px;
+            padding: 25px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+            border-left: 6px solid #6f42c1;
+        }
+
+        /* =========================
+           CABEÇALHO
+        ========================= */
+
+        .dd-header {
+            text-align: center;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .dd-header h1 {
+            color: #5a2d9c;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .dd-subtitle {
+            color: #6f42c1;
+            font-weight: bold;
+        }
+
+        /* =========================
+           DESCRIÇÃO DE ACESSIBILIDADE
+        ========================= */
+
+        .descricao-acessibilidade {
+            background-color: #f8f9fa;
+            border-left: 5px solid #6f42c1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .descricao-acessibilidade h2 {
+            color: #5a2d9c;
+            font-size: 1.05rem;
+            margin-bottom: 12px;
+        }
+
+        .dd-autodescricao-img {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 15px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000000;
+            border-radius: 50%;
+            border: 3px solid #6f42c1;
+            overflow: hidden;
+        }
+
+        .dd-autodescricao-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Foco visual para acessibilidade de teclado */
+        a:focus-visible,
+        button:focus-visible,
+        .skip-link:focus,
+        .accessibility-btn:focus-visible,
+        .acess-option-btn:focus-visible {
+            outline: 3px solid #ffcc00 !important;
+            outline-offset: 3px;
+        }
+
+        /* ==============================
+           WIDGET DE ACESSIBILIDADE
+           ============================== */
+
+        .accessibility-widget {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .accessibility-btn {
+            background-color: #ffffff;
+            color: #6f42c1;
+            border: 3px solid #6f42c1;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+
+        .accessibility-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .accessibility-panel {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            width: 240px;
+            background-color: #ffffff;
+            color: #1c1c1c;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #6f42c1;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+
+        .accessibility-panel h2 {
+            color: #5a2d9c;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 6px;
+            margin-top: 0;
+        }
+
+        .accessibility-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .acess-option-btn {
+            background-color: #f3f0fa;
+            color: #5a2d9c;
+            border: 1px solid #6f42c1;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: left;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .acess-option-btn:hover {
+            background-color: #6f42c1;
+            color: #ffffff;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* =========================
+           ÁREA DE PERGUNTAS
+        ========================= */
+
+        .perguntas-titulo {
+            color: #5a2d9c;
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+        }
+
+        .perguntas {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .pergunta-btn {
+            width: 100%;
+            padding: 13px 15px;
+            text-align: left;
+            background-color: #f3f0fa;
+            color: #5a2d9c;
+            border: 1px solid #6f42c1;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .pergunta-btn:hover {
+            background-color: #6f42c1;
+            color: #ffffff;
+        }
+
+        /* =========================
+           RESPOSTA
+        ========================= */
+
+        .resposta {
+            margin-top: 20px;
+            padding: 18px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 5px solid #6f42c1;
+            line-height: 1.6;
+            display: none;
+        }
+
+        .resposta.ativa {
+            display: block;
+        }
+
+        .resposta h3 {
+            color: #5a2d9c;
+            margin-bottom: 10px;
+        }
+
+        .resposta p {
+            margin-bottom: 10px;
+        }
+
+        .resposta ul {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        .prompt-exemplo {
+            background-color: #eeeeee;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        /* =========================
+           RODAPÉ
+        ========================= */
+
+        .dd-footer {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #dddddd;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #555555;
+        }
+
+        /* =========================
+           ESTILOS DE ALTO CONTRASTE
+        ========================= */
+
+        body.high-contrast {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+        }
+
+        body.high-contrast .dd-card,
+        body.high-contrast .descricao-acessibilidade,
+        body.high-contrast .resposta,
+        body.high-contrast .dd-autodescricao-img {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+            border-color: #ffff00 !important;
+            box-shadow: none !important;
+        }
+
+        body.high-contrast h1,
+        body.high-contrast h2,
+        body.high-contrast h3,
+        body.high-contrast p,
+        body.high-contrast li,
+        body.high-contrast .skip-link {
+            color: #ffff00 !important;
+        }
+
+        body.high-contrast .voltar-link,
+        body.high-contrast .pergunta-btn {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+            border-color: #ffff00 !important;
+        }
+
+        body.high-contrast .pergunta-btn:hover {
+            background-color: #ffff00 !important;
+            color: #000000 !important;
+        }
+
+        body.high-contrast .prompt-exemplo {
+            background-color: #1a1a1a !important;
+            color: #ffff00 !important;
+            border: 1px solid #ffff00 !important;
+        }
+
+        body.high-contrast .accessibility-btn,
+        body.high-contrast .accessibility-panel {
+            background-color: #000000 !important;
+            color: #ffff00 !important;
+            border-color: #ffff00 !important;
+        }
+
+        body.high-contrast .acess-option-btn {
+            background-color: #1a1a1a !important;
+            color: #ffff00 !important;
+            border-color: #ffff00 !important;
+        }
+
+        body.high-contrast .acess-option-btn:hover {
+            background-color: #ffff00 !important;
+            color: #000000 !important;
+        }
+
+        /* =========================
+           RESPONSIVIDADE
+        ========================= */
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .dd-card {
+                padding: 18px;
+            }
+
+            .dd-autodescricao-img {
+                width: 120px;
+                height: 120px;
+            }
+
+            .dd-header h1 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="#conteudo-principal" class="skip-link">Pular direto para o conteúdo</a>
+
+    <!-- Widget de Acessibilidade -->
+    <div class="accessibility-widget" role="region" aria-label="Menu de Acessibilidade">
+
+        <button
+            id="accessibility-toggle"
+            class="accessibility-btn"
+            aria-expanded="false"
+            aria-controls="accessibility-menu"
+            title="Abrir menu de acessibilidade">
+
+            <span aria-hidden="true">♿</span>
+            <span class="sr-only">Acessibilidade</span>
+
+        </button>
+
+        <div id="accessibility-menu" class="accessibility-panel" hidden>
+
+            <h2>Acessibilidade</h2>
+
+            <div class="accessibility-options">
+
+                <button id="btn-increase-font" class="acess-option-btn">
+                    Aumentar Fonte
+                </button>
+
+                <button id="btn-decrease-font" class="acess-option-btn">
+                    Diminuir Fonte
+                </button>
+
+                <button id="btn-high-contrast"
+                        class="acess-option-btn"
+                        aria-pressed="false">
+                    Alto Contraste
+                </button>
+
+                <button id="btn-reset-accessibility"
+                        class="acess-option-btn">
+                    Restaurar Padrão
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="container">
+
+        <!-- BOTÃO VOLTAR -->
+        <a href="Dashboard.html" class="voltar-link">
+            ⬅ Voltar ao Dashboard
+        </a>
+
+        <main id="conteudo-principal" class="dd-card">
+
+            <!-- =========================
+                 CABEÇALHO DO DD
+            ========================== -->
+            <header class="dd-header">
+                <h1>Daniel Danilo — DD</h1>
+                <p class="dd-subtitle">
+                    Assistente Virtual da AEDA
+                </p>
+            </header>
+
+            <!-- =========================
+                 ACESSIBILIDADE / SOBRE O DD
+            ========================== -->
+            <section class="descricao-acessibilidade">
+                <h2>♿ Sobre o DD</h2>
+
+                <div class="dd-autodescricao-img">
+                    <img 
+                        src="imagem-dd.png" 
+                        alt="Ilustração do rosto de Daniel Danilo (DD). Menino negro retinto com cabelos crespos pretos estilo Black Power, olhos grandes castanhos e usando um aparelho auditivo bege com detalhe azul na orelha direita."
+                    >
+                </div>
+
+                <p>
+                    Olá! Eu sou o Daniel Danilo, ou melhor, o DD!
+                    Sou o assistente virtual da AEDA e estou aqui para ajudar você a descobrir como a
+                    Inteligência Artificial pode ser usada de forma acessível, responsável e útil na educação.
+                </p>
+            </section>
+
+            <!-- =========================
+                 PERGUNTAS
+            ========================== -->
+            <section>
+                <h2 class="perguntas-titulo">
+                    💡 Como posso ajudar?
+                </h2>
+
+                <div class="perguntas">
+                    <button class="pergunta-btn" data-target="resposta1" aria-expanded="false" aria-controls="resposta1">
+                        📚 Como usar o ChatGPT ou o Gemini para estudar sendo uma pessoa com deficiência?
+                    </button>
+
+                    <button class="pergunta-btn" data-target="resposta2" aria-expanded="false" aria-controls="resposta2">
+                        💬 Como criar um prompt que realmente me ajude?
+                    </button>
+
+                    <button class="pergunta-btn" data-target="resposta3" aria-expanded="false" aria-controls="resposta3">
+                        🧠 A Inteligência Artificial vai me deixar “burro”?
+                    </button>
+
+                    <button class="pergunta-btn" data-target="resposta4" aria-expanded="false" aria-controls="resposta4">
+                        🔍 Posso confiar em tudo que a Inteligência Artificial responde?
+                    </button>
+
+                    <button class="pergunta-btn" data-target="resposta5" aria-expanded="false" aria-controls="resposta5">
+                        ✏️ Posso usar IA para fazer minha tarefa?
+                    </button>
+
+                    <button class="pergunta-btn" data-target="resposta6" aria-expanded="false" aria-controls="resposta6">
+                        📖 Como pedir para a IA explicar uma matéria que eu não entendi?
+                    </button>
+
+                    <button class="pergunta-btn" data-target="resposta7" aria-expanded="false" aria-controls="resposta7">
+                        ♿ A IA pode adaptar um conteúdo para minhas necessidades?
+                    </button>
+
+                    <button class="pergunta-btn" data-target="resposta8" aria-expanded="false" aria-controls="resposta8">
+                        📝 A IA pode corrigir minha redação?
+                    </button>
+
+                    <button class="pergunta-btn" data-target="resposta9" aria-expanded="false" aria-controls="resposta9">
+                        ⚠️ E se a IA me der uma resposta errada?
+                    </button>
+
+                    <button class="pergunta-btn" data-target="resposta10" aria-expanded="false" aria-controls="resposta10">
+                        🌱 Qual é a melhor forma de usar a IA nos estudos?
+                    </button>
+                </div>
+
+                <!-- =========================
+                     RESPOSTAS
+                ========================== -->
+
+                <div id="resposta1" class="resposta">
+                    <h3>📚 Como usar o ChatGPT ou o Gemini para estudar sendo PCD?</h3>
+                    <p>A Inteligência Artificial pode ser uma ferramenta de apoio aos estudos e ajudar a adaptar conteúdos de acordo com diferentes necessidades.</p>
+                    <p>Você pode pedir, por exemplo, para a IA:</p>
+                    <ul>
+                        <li>explicar um conteúdo usando uma linguagem mais simples;</li>
+                        <li>resumir textos grandes;</li>
+                        <li>transformar informações em tópicos;</li>
+                        <li>criar mapas mentais;</li>
+                        <li>elaborar questões para você praticar;</li>
+                        <li>ajudar a organizar uma rotina de estudos;</li>
+                        <li>transformar um texto em uma estrutura mais fácil de acompanhar;</li>
+                        <li>explicar um assunto passo a passo.</li>
+                    </ul>
+                    <p>O mais importante é explicar à IA como você aprende melhor e que tipo de ajuda precisa.</p>
+                </div>
+
+                <div id="resposta2" class="resposta">
+                    <h3>💬 Como criar um prompt que realmente me ajude?</h3>
+                    <p>Um bom prompt é uma instrução clara para a Inteligência Artificial. Quanto mais informações relevantes você fornecer, maiores são as chances de receber uma resposta adequada ao que você precisa.</p>
+                    <p>Por exemplo, em vez de escrever:</p>
+                    <div class="prompt-exemplo">«“Tenho deficiência intelectual. Me explique regra de três.”»</div>
+                    <p>Você pode ser mais específico:</p>
+                    <div class="prompt-exemplo">«“Sou uma pessoa com deficiência intelectual. Aja como um professor e explique regra de três de maneira simples, acessível e passo a passo. Use exemplos do cotidiano e evite palavras muito difíceis.”»</div>
+                    <p>Você também pode informar o nível de dificuldade, o formato que prefere e o que está tendo dificuldade para entender.</p>
+                </div>
+
+                <div id="resposta3" class="resposta">
+                    <h3>🧠 A Inteligência Artificial vai me deixar “burro”?</h3>
+                    <p>Não. A Inteligência Artificial, por si só, não diminui a capacidade de uma pessoa de aprender.</p>
+                    <p>O problema está em como ela é utilizada.</p>
+                    <p>Se você simplesmente copia uma resposta da IA sem tentar entender, questionar ou verificar as informações, perde uma oportunidade importante de aprender.</p>
+                    <p>Por outro lado, quando você utiliza a IA para pedir explicações, comparar ideias, tirar dúvidas, praticar questões e descobrir onde está errando, ela pode funcionar como uma ferramenta de apoio ao aprendizado.</p>
+                    <p><strong>A IA não deve pensar no lugar de você. Ela deve ajudar você a pensar, aprender e desenvolver sua própria autonomia.</strong></p>
+                </div>
+
+                <div id="resposta4" class="resposta">
+                    <h3>🔍 Posso confiar em tudo que a Inteligência Artificial responde?</h3>
+                    <p>Não.</p>
+                    <p>A Inteligência Artificial pode cometer erros, apresentar informações desatualizadas ou até inventar informações que parecem verdadeiras.</p>
+                    <p>Por isso, é importante:</p>
+                    <ul>
+                        <li>verificar informações importantes em fontes confiáveis;</li>
+                        <li>comparar diferentes fontes;</li>
+                        <li>perguntar de onde veio determinada informação;</li>
+                        <li>não copiar uma resposta sem entendê-la;</li>
+                        <li>conversar com professores quando tiver dúvidas.</li>
+                    </ul>
+                    <p><strong>Usar IA também significa aprender a questionar a própria IA.</strong></p>
+                </div>
+
+                <div id="resposta5" class="resposta">
+                    <h3>✏️ Posso usar IA para fazer minha tarefa?</h3>
+                    <p>Você pode utilizar a IA como uma ferramenta de apoio, mas o objetivo deve ser aprender, e não simplesmente entregar uma resposta pronta.</p>
+                    <p>Por exemplo, você pode pedir:</p>
+                    <div class="prompt-exemplo">«“Não me dê a resposta. Explique como resolver essa questão e me deixe tentar.”»</div>
+                    <p>Dessa maneira, a IA pode funcionar como uma espécie de tutor durante o processo de aprendizagem.</p>
+                </div>
+
+                <div id="resposta6" class="resposta">
+                    <h3>📖 Como pedir para a IA explicar uma matéria que eu não entendi?</h3>
+                    <p>Conte para a IA qual assunto você está estudando e qual parte está causando dificuldade.</p>
+                    <p>Por exemplo:</p>
+                    <div class="prompt-exemplo">«“Estou estudando fotossíntese e não entendi a diferença entre fase clara e fase escura. Explique passo a passo, usando uma linguagem simples e um exemplo.”»</div>
+                    <p>Você também pode pedir:</p>
+                    <div class="prompt-exemplo">«“Explique novamente de uma maneira ainda mais simples.”»</div>
+                    <p>Não existe problema em pedir para a IA explicar novamente. Aprender também envolve tentar, errar, perguntar e tentar de novo.</p>
+                </div>
+
+                <div id="resposta7" class="resposta">
+                    <h3>♿ A IA pode adaptar um conteúdo para minhas necessidades?</h3>
+                    <p>Sim. Você pode pedir que um conteúdo seja apresentado de uma maneira que facilite sua compreensão.</p>
+                    <p>Por exemplo:</p>
+                    <ul>
+                        <li>«“Transforme este texto em tópicos curtos.”»</li>
+                        <li>«“Explique este conteúdo usando frases curtas e palavras simples.”»</li>
+                        <li>«“Organize este conteúdo em uma tabela para facilitar minha visualização.”»</li>
+                    </ul>
+                    <p>A adaptação deve considerar as necessidades de cada estudante, porque pessoas com deficiência não aprendem todas da mesma maneira.</p>
+                </div>
+
+                <div id="resposta8" class="resposta">
+                    <h3>📝 A IA pode corrigir minha redação?</h3>
+                    <p>Pode ajudar a analisar sua redação e apontar aspectos que podem ser melhorados.</p>
+                    <p>Você pode pedir para a IA verificar, por exemplo:</p>
+                    <ul>
+                        <li>estrutura do texto;</li>
+                        <li>argumentação;</li>
+                        <li>coerência;</li>
+                        <li>gramática;</li>
+                        <li>repertório;</li>
+                        <li>proposta de intervenção.</li>
+                    </ul>
+                    <p>Mas não use a IA simplesmente para substituir sua escrita. O ideal é entender por que determinada parte precisa ser melhorada e tentar aplicar o conhecimento nas próximas redações.</p>
+                </div>
+
+                <div id="resposta9" class="resposta">
+                    <h3>⚠️ E se a IA me der uma resposta errada?</h3>
+                    <p>Não aceite a resposta automaticamente.</p>
+                    <p>Pergunte novamente, peça uma explicação e procure confirmar a informação em fontes confiáveis.</p>
+                    <p>Uma boa pergunta pode ser:</p>
+                    <div class="prompt-exemplo">«“Você tem certeza dessa informação? Explique como chegou a essa conclusão e indique fontes confiáveis para eu verificar.”»</div>
+                    <p>Pensamento crítico também faz parte da alfabetização em Inteligência Artificial.</p>
+                </div>
+
+                <div id="resposta10" class="resposta">
+                    <h3>🌱 Qual é a melhor forma de usar a IA nos estudos?</h3>
+                    <p>Use a IA como ferramenta, não como substituta do seu aprendizado.</p>
+                    <p><strong>Você pode utilizá-la para:</strong></p>
+                    <p>Entender ➔ Praticar ➔ Revisar ➔ Perguntar ➔ Corrigir ➔ Aprender</p>
+                    <p>O objetivo não é fazer tudo mais rápido. É tornar o aprendizado mais acessível, personalizado e possível para diferentes estudantes.</p>
+                </div>
+
+            </section>
+
+            <!-- =========================
+                 RODAPÉ
+            ========================== -->
+            <footer class="dd-footer">
+                <p>🤖 DD — Daniel Danilo</p>
+                <p>Assistente Virtual da AEDA</p>
+                <p>IA para uma educação mais acessível.</p>
+            </footer>
+
+        </main>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            
+            /* =========================
+               EXIBIÇÃO DAS RESPOSTAS
+            ========================== */
+            const perguntaBtns = document.querySelectorAll('.pergunta-btn');
+            const respostas = document.querySelectorAll('.resposta');
+
+            function mostrarResposta(id, btnClicado) {
+                respostas.forEach(function (resposta) {
+                    resposta.classList.remove('ativa');
+                });
+
+                perguntaBtns.forEach(function (btn) {
+                    btn.setAttribute('aria-expanded', 'false');
+                });
+
+                const respostaSelecionada = document.getElementById(id);
+                if (respostaSelecionada) {
+                    respostaSelecionada.classList.add('ativa');
+                    btnClicado.setAttribute('aria-expanded', 'true');
+                    respostaSelecionada.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest'
+                    });
+                }
+            }
+
+            perguntaBtns.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    mostrarResposta(targetId, this);
+                });
+            });
+
+            /* =========================
+               ATALHO DE TECLADO (ESC)
+            ========================== */
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape') {
+                    respostas.forEach(function (resposta) {
+                        resposta.classList.remove('ativa');
+                    });
+                    perguntaBtns.forEach(function (btn) {
+                        btn.setAttribute('aria-expanded', 'false');
+                    });
+
+                    const toggleBtn = document.getElementById("accessibility-toggle");
+                    const panel = document.getElementById("accessibility-menu");
+                    if (toggleBtn && panel) {
+                        toggleBtn.setAttribute("aria-expanded", "false");
+                        panel.hidden = true;
+                    }
+                }
+            });
+
+            /* =========================
+               WIDGET DE ACESSIBILIDADE
+            ========================== */
+            const toggleBtn = document.getElementById("accessibility-toggle");
+            const panel = document.getElementById("accessibility-menu");
+            const btnContrast = document.getElementById("btn-high-contrast");
+            const btnIncrease = document.getElementById("btn-increase-font");
+            const btnDecrease = document.getElementById("btn-decrease-font");
+            const btnReset = document.getElementById("btn-reset-accessibility");
+
+            let currentFontSize = 100;
+
+            toggleBtn.addEventListener("click", () => {
+                const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
+                toggleBtn.setAttribute("aria-expanded", !isExpanded);
+                panel.hidden = isExpanded;
+            });
+
+            document.addEventListener("click", (event) => {
+                if (!document.querySelector(".accessibility-widget").contains(event.target)) {
+                    toggleBtn.setAttribute("aria-expanded", "false");
+                    panel.hidden = true;
+                }
+            });
+
+            btnContrast.addEventListener("click", () => {
+                document.body.classList.toggle("high-contrast");
+                const isActive = document.body.classList.contains("high-contrast");
+                btnContrast.setAttribute("aria-pressed", isActive);
+                btnContrast.textContent = isActive ? "Desativar Alto Contraste" : "Alto Contraste";
+            });
+
+            btnIncrease.addEventListener("click", () => {
+                if (currentFontSize < 150) {
+                    currentFontSize += 10;
+                    document.documentElement.style.fontSize = currentFontSize + "%";
+                }
+            });
+
+            btnDecrease.addEventListener("click", () => {
+                if (currentFontSize > 90) {
+                    currentFontSize -= 10;
+                    document.documentElement.style.fontSize = currentFontSize + "%";
+                }
+            });
+
+            btnReset.addEventListener("click", () => {
+                currentFontSize = 100;
+                document.documentElement.style.fontSize = "100%";
+                document.body.classList.remove("high-contrast");
+                btnContrast.setAttribute("aria-pressed", "false");
+                btnContrast.textContent = "Alto Contraste";
+            });
+        });
+    </script>
+
+    <!-- Plugin de Libras (Hand Talk) -->
+    <script src="https://plugin.handtalk.me/web/latest/handtalk.min.js"></script>
+    <script>
+      var ht = new HT({
+        token: "SEU_TOKEN_AQUI"
+      });
+    </script>
+
+</body>
+
+</html>

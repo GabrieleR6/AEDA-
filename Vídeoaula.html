@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEDA - Módulo de Videoaulas (Em Desenvolvimento)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* Fundo geral da página */
+        body {
+            background-color: #0d1b2a;
+            color: #ffffff;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Botão / Link de voltar com acessibilidade */
+        .voltar-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ffffff;
+            background-color: #1b263b;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 10px 18px;
+            border-radius: 6px;
+            border: 1px solid #415a77;
+        }
+
+        .voltar-link:hover {
+            background-color: #415a77;
+        }
+
+        .voltar-link:focus-visible {
+            outline: 3px solid #ffffff;
+            outline-offset: 2px;
+        }
+
+        /* Cabeçalho da página */
+        header {
+            background-color: #ffffff;
+            color: #1c1c1c;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border-left: 6px solid #415a77;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            color: #0d1b2a;
+        }
+
+        header p {
+            color: #415a77;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        /* Caixas de texto na cor branca */
+        .card {
+            background-color: #ffffff;
+            color: #1c1c1c;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            border-left: 6px solid #0d1b2a;
+        }
+
+        .card h2 {
+            color: #0d1b2a;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            margin-bottom: 18px;
+            font-size: 1.3rem;
+        }
+
+        .card p {
+            color: #2b2b2b;
+            margin-bottom: 10px;
+        }
+
+        /* Listas acessíveis dentro da caixa branca */
+        .lista-recursos {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .lista-recursos li {
+            background-color: #f4f6f8;
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            border-left: 4px solid #0d1b2a;
+            border-radius: 6px;
+            color: #1c1c1c;
+        }
+
+        .lista-recursos strong {
+            color: #0d1b2a;
+        }
+
+        /* Tabela dentro da caixa branca */
+        .tabela-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+
+        caption {
+            text-align: left;
+            font-size: 0.9rem;
+            color: #555555;
+            margin-bottom: 8px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            color: #1c1c1c;
+        }
+
+        th {
+            background-color: #0d1b2a;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Rodapé */
+        footer {
+            text-align: center;
+            padding-top: 10px;
+            color: #ffffff;
+            font-size: 0.9rem;
+        }
+
+        footer hr {
+            border: 0;
+            border-top: 1px solid #415a77;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <a href="Dashboard.html" class="voltar-link" aria-label="Voltar para o Dashboard da plataforma">⬅ Voltar para o Dashboard</a>
+
+        <header>
+            <h1>🎥 Módulo de Videoaulas — Expansão do Projeto</h1>
+            <p>Plano de implementação da versão 2.0 da plataforma AEDA</p>
+        </header>
+
+        <main>
+                      <!-- Bloco de Expansão de LIBRAS -->
+            <section class="card" aria-labelledby="libras-titulo">
+                <h2 id="libras-titulo">🤟 Expansão e Acessibilidade em LIBRAS</h2>
+                <p>
+                    A plataforma AEDA foi totalmente projetada seguindo as diretrizes do WCAG (Web Content Accessibility Guidelines). A integração nativa com tradutores e assistentes virtuais de LIBRAS (como o plugin <em>Hand Talk</em>) está estruturada no front-end e mapeada como o principal pilar da nossa <strong>fase de implantação em produção</strong>.
+                </p>
+                <p>
+                    Por se tratar de um recurso que exige autenticação via token corporativo de API em ambiente final, a funcionalidade de tradução automatizada será ativada na distribuição oficial. Além disso, a versão 2.0 contará com vídeos adaptados contendo janela de intérprete humano e legendas sincronizadas, garantindo plena autonomia e inclusão para a comunidade surda.
+                </p>
+            </section>
+
+            <!-- Bloco de Status -->
+            <section class="card" aria-labelledby="status-titulo">
+                <h2 id="status-titulo">Status do Módulo: Em Desenvolvimento / Próxima Etapa</h2>
+                <p>
+                    O módulo de videoaulas interativas faz parte do plano de expansão contínua da plataforma AEDA. 
+                    Esta funcionalidade está em fase de estruturação metodológica para garantir a inclusão de conteúdos acessíveis, com legendas, transcrições e recursos adaptativos.
+                </p>
+            </section>
+
+            <!-- Bloco de Recursos Previstos -->
+            <section class="card" aria-labelledby="recursos-titulo">
+                <h2 id="recursos-titulo">🚀 Recursos Previstos para a Versão 2.0</h2>
+                <ul class="lista-recursos">
+                    <li><strong>Videoaulas Curtas (Microlearning):</strong> Foco na resolução rápida dos tópicos de maior recorrência no ENEM.</li>
+                    <li><strong>Acessibilidade Nativa:</strong> Suporte a legendas completas, audiodescrição e integração com intérprete virtual de Libras.</li>
+                    <li><strong>Material Complementar:</strong> Downloads de PDFs resumidos vinculados diretamente a cada vídeo.</li>
+                    <li><strong>Acompanhamento de Visualização:</strong> Integração com a barra de progresso do cronograma do aluno.</li>
+                </ul>
+            </section>
+
+            <!-- Bloco de Arquitetura em Tabela -->
+            <section class="card" aria-labelledby="arquitetura-titulo">
+                <h2 id="arquitetura-titulo">📐 Arquitetura do Módulo (Protótipo)</h2>
+                <p>Abaixo está a representação da estrutura que será integrada na próxima fase do projeto:</p>
+                
+                <div class="tabela-container">
+                    <table>
+                        <caption>Estrutura planejada para as áreas de conhecimento na versão 2.0</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Área do Conhecimento</th>
+                                <th scope="col">Conteúdo Previsto</th>
+                                <th scope="col">Formato</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Matemática e Suas Tecnologias</td>
+                                <td>Resolução de Exercícios & Métodos Rápidos</td>
+                                <td>Vídeo HD + PDF Interativo</td>
+                            </tr>
+                            <tr>
+                                <td>Ciências da Natureza</td>
+                                <td>Experimentos Práticos & Mapas Conceituais</td>
+                                <td>Vídeo HD + Flashcards</td>
+                            </tr>
+                            <tr>
+                                <td>Ciências Humanas & Linguagens</td>
+                                <td>Análise de Temas de Redação & Repertórios</td>
+                                <td>Vídeo HD + Modelos Nota 1000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <hr>
+            <p><small> AEDA - Academia de estudos digital acessível
+            </small></p>
+        </footer>
+
+    </div>
+
+</body>
+
+</html>
