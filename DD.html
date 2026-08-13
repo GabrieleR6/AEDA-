@@ -720,7 +720,6 @@
     </div>
 
             </section>
-
             <!-- =========================
                  RODAPÉ
             ========================== -->
@@ -755,7 +754,9 @@
                 const respostaSelecionada = document.getElementById(id);
                 if (respostaSelecionada) {
                     respostaSelecionada.classList.add('ativa');
-                    btnClicado.setAttribute('aria-expanded', 'true');
+                    if (btnClicado) {
+                        btnClicado.setAttribute('aria-expanded', 'true');
+                    }
                     respostaSelecionada.scrollIntoView({
                         behavior: 'smooth',
                         block: 'nearest'
@@ -800,50 +801,125 @@
             const btnIncrease = document.getElementById("btn-increase-font");
             const btnDecrease = document.getElementById("btn-decrease-font");
             const btnReset = document.getElementById("btn-reset-accessibility");
+            const accessibilityWidget = document.querySelector(".accessibility-widget");
 
             let currentFontSize = 100;
 
-            toggleBtn.addEventListener("click", () => {
-                const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
-                toggleBtn.setAttribute("aria-expanded", !isExpanded);
-                panel.hidden = isExpanded;
-            });
+            if (toggleBtn && panel) {
+                toggleBtn.addEventListener("click", () => {
+                    const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
+                    toggleBtn.setAttribute("aria-expanded", !isExpanded);
+                    panel.hidden = isExpanded;
+                });
+            }
 
             document.addEventListener("click", (event) => {
-                if (!document.querySelector(".accessibility-widget").contains(event.target)) {
-                    toggleBtn.setAttribute("aria-expanded", "false");
-                    panel.hidden = true;
+                if (accessibilityWidget && !accessibilityWidget.contains(event.target)) {
+                    if (toggleBtn && panel) {
+                        toggleBtn.setAttribute("aria-expanded", "false");
+                        panel.hidden = true;
+                    }
                 }
             });
 
-            btnContrast.addEventListener("click", () => {
-                document.body.classList.toggle("high-contrast");
-                const isActive = document.body.classList.contains("high-contrast");
-                btnContrast.setAttribute("aria-pressed", isActive);
-                btnContrast.textContent = isActive ? "Desativar Alto Contraste" : "Alto Contraste";
-            });
+            if (btnContrast) {
+                btnContrast.addEventListener("click", () => {
+                    document.body.classList.toggle("high-contrast");
+                    const isActive = document.body.classList.contains("high-contrast");
+                    btnContrast.setAttribute("aria-pressed", isActive);
+                    btnContrast.textContent = isActive ? "Desativar Alto Contraste" : "Alto Contraste";
+                });
+            }
 
-            btnIncrease.addEventListener("click", () => {
-                if (currentFontSize < 150) {
-                    currentFontSize += 10;
-                    document.documentElement.style.fontSize = currentFontSize + "%";
-                }
-            });
+            if (btnIncrease) {
+                btnIncrease.addEventListener("click", () => {
+                    if (currentFontSize < 150) {
+                        currentFontSize += 10;
+                        document.documentElement.style.fontSize = currentFontSize + "%";
+                    }
+                });
+            }
 
-            btnDecrease.addEventListener("click", () => {
-                if (currentFontSize > 90) {
-                    currentFontSize -= 10;
-                    document.documentElement.style.fontSize = currentFontSize + "%";
-                }
-            });
+            if (btnDecrease) {
+                btnDecrease.addEventListener("click", () => {
+                    if (currentFontSize > 90) {
+                        currentFontSize -= 10;
+                        document.documentElement.style.fontSize = currentFontSize + "%";
+                    }
+                });
+            }
 
-            btnReset.addEventListener("click", () => {
-                currentFontSize = 100;
-                document.documentElement.style.fontSize = "100%";
-                document.body.classList.remove("high-contrast");
-                btnContrast.setAttribute("aria-pressed", "false");
-                btnContrast.textContent = "Alto Contraste";
-            });
+            if (btnReset) {
+                btnReset.addEventListener("click", () => {
+                    currentFontSize = 100;
+                    document.documentElement.style.fontSize = "100%";
+                    document.body.classList.remove("high-contrast");
+                    if (btnContrast) {
+                        btnContrast.setAttribute("aria-pressed", "false");
+                        btnContrast.textContent = "Alto Contraste";
+                    }
+                });
+            }
+
+            /* =========================
+               CHAT DO DD - TESTE DO BACKEND
+            ========================= */
+            const campoMensagem = document.getElementById("mensagem-dd");
+            const botaoEnviar = document.getElementById("enviar-dd");
+            const areaResposta = document.getElementById("resposta-chat-dd");
+            const textoResposta = document.getElementById("texto-resposta-dd");
+
+            if (botaoEnviar && campoMensagem && areaResposta && textoResposta) {
+                botaoEnviar.addEventListener("click", async function () {
+
+                    const mensagem = campoMensagem.value.trim();
+
+                    if (!mensagem) {
+                        textoResposta.textContent = "Digite uma mensagem antes de enviar.";
+                        areaResposta.classList.add("ativa");
+                        return;
+                    }
+
+                    botaoEnviar.disabled = true;
+                    botaoEnviar.textContent = "Enviando...";
+
+                    textoResposta.textContent = "O DD está processando sua mensagem...";
+                    areaResposta.classList.add("ativa");
+
+                    try {
+                        const resposta = await fetch(
+                            "https://aeda-omega.vercel.app/api/chat",
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    mensagem: mensagem
+                                })
+                            }
+                        );
+
+                        const dados = await resposta.json();
+
+                        if (!resposta.ok) {
+                            throw new Error(
+                                dados.error || "Erro ao comunicar com o servidor."
+                            );
+                        }
+
+                        textoResposta.textContent = dados.resposta;
+
+                    } catch (erro) {
+                        console.error("Erro no DD:", erro);
+                        textoResposta.textContent = "Não foi possível conectar ao DD agora. Tente novamente.";
+
+                    } finally {
+                        botaoEnviar.disabled = false;
+                        botaoEnviar.textContent = "Enviar mensagem";
+                    }
+                });
+            }
         });
     </script>
 
@@ -853,9 +929,11 @@
       var ht = new HT({
         token: "SEU_TOKEN_AQUI"
       });
-        
     </script>
 
 </body>
 
 </html>
+
+
+            
