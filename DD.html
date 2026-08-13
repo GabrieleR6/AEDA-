@@ -853,6 +853,68 @@
       var ht = new HT({
         token: "SEU_TOKEN_AQUI"
       });
+        /* =========================
+   CHAT DO DD - TESTE DO BACKEND
+========================= */
+
+const campoMensagem = document.getElementById("mensagem-dd");
+const botaoEnviar = document.getElementById("enviar-dd");
+const areaResposta = document.getElementById("resposta-chat-dd");
+const textoResposta = document.getElementById("texto-resposta-dd");
+
+botaoEnviar.addEventListener("click", async function () {
+
+    const mensagem = campoMensagem.value.trim();
+
+    if (!mensagem) {
+        textoResposta.textContent = "Digite uma mensagem antes de enviar.";
+        areaResposta.classList.add("ativa");
+        return;
+    }
+
+    botaoEnviar.disabled = true;
+    botaoEnviar.textContent = "Enviando...";
+    textoResposta.textContent = "O DD está processando sua mensagem...";
+    areaResposta.classList.add("ativa");
+
+    try {
+
+        const resposta = await fetch(
+            "https://aeda-omega.vercel.app/api/chat",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    mensagem: mensagem
+                })
+            }
+        );
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+            throw new Error(dados.error || "Erro ao comunicar com o servidor.");
+        }
+
+        textoResposta.textContent = dados.resposta;
+
+    } catch (erro) {
+
+        console.error("Erro no DD:", erro);
+
+        textoResposta.textContent =
+            "Não foi possível conectar ao DD agora. Tente novamente.";
+
+    } finally {
+
+        botaoEnviar.disabled = false;
+        botaoEnviar.textContent = "Enviar mensagem";
+    }
+});
     </script>
 
 </body>
