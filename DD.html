@@ -671,6 +671,55 @@
                 </div>
 
             </section>
+            <section class="chat-dd" aria-labelledby="titulo-chat-dd">
+
+    <h2 id="titulo-chat-dd" class="perguntas-titulo">
+        🤖 Converse com o DD
+    </h2>
+
+    <p>
+        Digite uma dúvida sobre seus estudos e converse com o assistente.
+    </p>
+
+    <label for="mensagem-dd" class="sr-only">
+        Digite sua mensagem para o DD
+    </label>
+
+    <textarea
+        id="mensagem-dd"
+        rows="4"
+        maxlength="1000"
+        placeholder="Ex.: Explique fotossíntese de uma forma simples."
+        aria-describedby="limite-mensagem">
+    </textarea>
+
+    <p id="limite-mensagem">
+        Máximo de 1000 caracteres.
+    </p>
+
+    <button
+        type="button"
+        id="enviar-dd"
+        class="pergunta-btn">
+        Enviar mensagem
+    </button>
+
+    <div
+        id="resposta-chat-dd"
+        class="resposta"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true">
+
+        <h3>DD:</h3>
+
+        <p id="texto-resposta-dd">
+            Escreva uma mensagem para começar.
+        </p>
+
+    </div>
+
+            </section>
 
             <!-- =========================
                  RODAPÉ
