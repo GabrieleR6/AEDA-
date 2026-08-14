@@ -862,94 +862,94 @@
             }
 
             /* =========================
-   CHAT DO DD
-========================= */
+               CHAT DO DD
+            ========================= */
+            const campoMensagem = document.getElementById("mensagem-dd");
+            const botaoEnviar = document.getElementById("enviar-dd");
+            const areaResposta = document.getElementById("resposta-chat-dd");
+            const textoResposta = document.getElementById("texto-resposta-dd");
 
-const campoMensagem = document.getElementById("mensagem-dd");
-const botaoEnviar = document.getElementById("enviar-dd");
-const areaResposta = document.getElementById("resposta-chat-dd");
-const textoResposta = document.getElementById("texto-resposta-dd");
+            if (botaoEnviar && campoMensagem && areaResposta && textoResposta) {
 
-if (botaoEnviar && campoMensagem && areaResposta && textoResposta) {
+                botaoEnviar.addEventListener("click", async function () {
 
-    botaoEnviar.addEventListener("click", async function () {
+                    const mensagem = campoMensagem.value.trim();
 
-        const mensagem = campoMensagem.value.trim();
+                    if (!mensagem) {
+                        textoResposta.textContent =
+                            "Digite uma mensagem antes de enviar.";
 
-        if (!mensagem) {
-            textoResposta.textContent =
-                "Digite uma mensagem antes de enviar.";
+                        areaResposta.classList.add("ativa");
+                        return;
+                    }
 
-            areaResposta.classList.add("ativa");
-            return;
-        }
+                    botaoEnviar.disabled = true;
+                    botaoEnviar.textContent = "Enviando...";
 
-        botaoEnviar.disabled = true;
-        botaoEnviar.textContent = "Enviando...";
+                    textoResposta.textContent =
+                        "O DD está processando sua mensagem...";
 
-        textoResposta.textContent =
-            "O DD está processando sua mensagem...";
+                    areaResposta.classList.add("ativa");
 
-        areaResposta.classList.add("ativa");
+                    try {
 
-        try {
+                        const resposta = await fetch(
+                            "https://aeda-omega.vercel.app/api/chat",
+                            {
+                                method: "POST",
 
-            const resposta = await fetch(
-                "https://aeda-omega.vercel.app/api/chat",
-                {
-                    method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
 
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+                                body: JSON.stringify({
+                                    mensagem: mensagem
+                                })
+                            }
+                        );
 
-                    body: JSON.stringify({
-                        mensagem: mensagem
-                    })
-                }
-            );
+                        const dados = await resposta.json();
 
-            const dados = await resposta.json();
+                        if (!resposta.ok) {
+                            throw new Error(
+                                dados.error ||
+                                "A IA está temporariamente indisponível."
+                            );
+                        }
 
-            if (!resposta.ok) {
-                throw new Error(
-                    dados.error ||
-                    "A IA está temporariamente indisponível."
-                );
+                        textoResposta.textContent =
+                            dados.resposta ||
+                            "O DD não conseguiu gerar uma resposta.";
+
+                    } catch (erro) {
+
+                        console.error("Erro no DD:", erro);
+
+                        /*
+                         * A API de IA pode estar indisponível.
+                         * O site continua funcionando normalmente.
+                         */
+
+                        textoResposta.innerHTML =
+                            "<strong>🤖 DD:</strong><br><br>" +
+                            "No momento, minha função de IA generativa " +
+                            "está temporariamente indisponível.<br><br>" +
+                            "Você ainda pode utilizar as orientações " +
+                            "e respostas disponíveis nesta página para " +
+                            "aprender sobre o uso da Inteligência Artificial " +
+                            "nos estudos.";
+
+                        areaResposta.classList.add("ativa");
+
+                    } finally {
+
+                        botaoEnviar.disabled = false;
+                        botaoEnviar.textContent = "Enviar mensagem";
+
+                    }
+                });
             }
-
-            textoResposta.textContent =
-                dados.resposta ||
-                "O DD não conseguiu gerar uma resposta.";
-
-        } catch (erro) {
-
-            console.error("Erro no DD:", erro);
-
-            /*
-             * A API de IA pode estar indisponível.
-             * O site continua funcionando normalmente.
-             */
-
-            textoResposta.innerHTML =
-                "<strong>🤖 DD:</strong><br><br>" +
-                "No momento, minha função de IA generativa " +
-                "está temporariamente indisponível.<br><br>" +
-                "Você ainda pode utilizar as orientações " +
-                "e respostas disponíveis nesta página para " +
-                "aprender sobre o uso da Inteligência Artificial " +
-                "nos estudos.";
-
-            areaResposta.classList.add("ativa");
-
-        } finally {
-
-            botaoEnviar.disabled = false;
-            botaoEnviar.textContent = "Enviar mensagem";
-
-        }
-    });
-}
+        });
     </script>
 
     <!-- Plugin de Libras (Hand Talk) -->
@@ -964,5 +964,7 @@ if (botaoEnviar && campoMensagem && areaResposta && textoResposta) {
 
 </html>
 
-
             
+            
+
+                    
