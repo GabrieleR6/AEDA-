@@ -1,12 +1,15 @@
 export default async function handler(req, res) {
+    // Permite que o site converse com o backend
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
+    // Responde às verificações do navegador
     if (req.method === "OPTIONS") {
         return res.status(200).end();
     }
 
+    // Aceita somente POST
     if (req.method !== "POST") {
         return res.status(405).json({
             error: "Método não permitido"
@@ -22,19 +25,10 @@ export default async function handler(req, res) {
             });
         }
 
-        if (mensagem.length > 2000) {
-            return res.status(400).json({
-                error: "Mensagem muito longa."
-            });
-        }
-
-        const apiKey = process.env.OPENAI_API_KEY;
-
-        if (!apiKey) {
-            console.error("OPENAI_API_KEY não configurada.");
-
+        // Verifica se a chave existe na Vercel
+        if (!process.env.OPENAI_API_KEY) {
             return res.status(500).json({
-                error: "A IA ainda não está configurada no servidor."
+                error: "OPENAI_API_KEY não configurada na Vercel."
             });
         }
 
@@ -45,42 +39,19 @@ export default async function handler(req, res) {
 
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${apiKey}`
+                    "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
                 },
 
                 body: JSON.stringify({
                     model: "gpt-5-mini",
-
-                    instructions: `
-Você é Daniel Danilo, o DD, assistente virtual da AEDA
-(Academia de Estudo Digital Acessível).
-
-Seu objetivo é ajudar estudantes, especialmente estudantes
-com deficiência, durante seus estudos para o ENEM.
-
-Responda em português do Brasil.
-
-Seja acolhedor, claro, didático e respeitoso.
-
-Adapte as explicações quando o estudante solicitar.
-
-Ajude o estudante a compreender o raciocínio em vez de
-simplesmente fazer atividades no lugar dele.
-
-Não invente informações.
-
-Quando não tiver certeza, deixe isso claro.
-
-A IA é uma ferramenta de apoio e não substitui professores,
-fontes confiáveis ou profissionais especializados.
-
-Não solicite dados pessoais desnecessários.
-
-Evite linguagem capacitista.
-                    `,
-
-                    input: mensagem,
-                    max_output_tokens: 600
+                    instructions:
+                        "Você é Daniel Danilo, chamado de DD, o assistente virtual da AEDA. " +
+                        "Você ajuda estudantes, especialmente estudantes com deficiência, " +
+                        "a aprender de forma acessível, responsável e autônoma. " +
+                        "Explique assuntos de maneira clara, acolhedora e didática. " +
+                        "Não faça a tarefa do estudante simplesmente por ele; ajude-o a aprender. " +
+                        "Quando apropriado, use exemplos, passos e linguagem simples.",
+                    input: mensagem
                 })
             }
         );
@@ -90,21 +61,24 @@ Evite linguagem capacitista.
         if (!respostaOpenAI.ok) {
             console.error("Erro da OpenAI:", dados);
 
-            return res.status(500).json({
-                error: "Não foi possível obter uma resposta da IA."
+            return res.status(respostaOpenAI.status).json({
+                error: "Erro ao consultar a Inteligência Artificial."
             });
         }
 
+        const resposta =
+            dados.output_text ||
+            "O DD não conseguiu gerar uma resposta.";
+
         return res.status(200).json({
-            resposta: dados.output_text ||
-                "Não consegui gerar uma resposta."
+            resposta: resposta
         });
 
     } catch (error) {
         console.error("Erro no servidor:", error);
 
         return res.status(500).json({
-            error: "Erro interno ao conectar com a IA."
+            error: "Erro interno do servidor."
         });
     }
-}
+            }
